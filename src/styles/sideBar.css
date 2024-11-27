@@ -1,0 +1,32 @@
+.layout {
+  width: 100%;
+  height: 100vh;
+
+  display: grid;
+  grid-template-columns: 1fr 3fr 3fr; /* Columnas de igual ancho */
+  grid-template-rows: 1fr 5fr 5fr; /* Filas de igual alto */
+  grid-template-areas: /* Agrupar elementos */
+    "header header header" /* Area de encabezado */
+    "leftSide body body" /* Area de contenido */
+    "leftSide body body"; /* Area de contenido */
+}
+
+.header {
+  grid-area: header;
+  background-color: #729ccc;
+  display: flex;
+  padding: 1rem 4rem;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.leftSide {
+  background-color: #43709a;
+  grid-area: leftSide;
+  width: 100%;
+}
+.body {
+  background-color: #ffffff;
+  grid-area: body;
+  overflow-y: scroll;
+}
