@@ -78,7 +78,7 @@ const FormularioG = () => {
           {...register("telefono", { required: true })}
         />
 
-        <Button type="submit">Actualizar</Button>
+        <Button type="submit">Actualizar mi perfil</Button>
       </form>
     </>
   );

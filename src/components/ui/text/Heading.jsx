@@ -1,7 +1,5 @@
 const Heading = ({ level = 1, children, ...props }) => {
-  const Tag = `h${level}`; // Se establece el tipo de etiqueta dinámicamente
-
-  // Estilos comunes para todos los encabezados
+  const Tag = `h${level}`;
   const classNames = "font-black text-azul-10";
 
   return (

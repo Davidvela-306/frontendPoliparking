@@ -3,7 +3,7 @@ import { useAuth } from "@context/AuthContext";
 import adminService from "@/services/adminService";
 import { Pagination, DataTable } from "@/components/common/index";
 import { Heading } from "@/components/ui/text/index";
-import RegisterAdminUser from "@/components/RegisterAdminUser";
+import RegisterGuardiaUser from "@/components/RegisterGuardiaUser";
 
 /**
  * This component renders a page for managing external users.
@@ -41,13 +41,6 @@ const UsuariosAdminPage = () => {
     { key: "telefono", label: "Telefono" },
     { key: "rol", label: "Rol" },
   ];
-  const actions = [
-    {
-      label: "Eliminar",
-      style: "bg-red-500",
-      onClick: (item) => handleDeleteUser(item._id, item.email),
-    },
-  ];
 
   // Filtering Logic
   const filteredUsers = useMemo(() => {
@@ -79,20 +72,6 @@ const UsuariosAdminPage = () => {
     return filteredUsers.slice(startIndex, endIndex);
   }, [filteredUsers, currentPage, itemsPerPage]);
 
-  const handleDeleteUser = (id, email) => {
-    if (window.confirm(`Deseas eliminar al usuario ${email}?`)) {
-      setFilterUsers(filterUsers.filter((user) => user._id !== id));
-      adminService
-        .deleteExternalUser(token, id)
-        .then(() => {
-          alert("Usuario eliminado correctamente");
-        })
-        .catch((error) => {
-          alert("Error al eliminar el usuario:", error);
-        });
-    }
-  };
-
   const handleFilterByRole = (role) => {
     setFilterRole(role);
     setCurrentPage(1);
@@ -109,12 +88,8 @@ const UsuariosAdminPage = () => {
       <div className="mb-5 text-justify gap-y-10">
         <Heading level={4}>Gestión de Usuarios</Heading>
         <Heading level={1}>
-          Este módulo está diseñada para que puedas gestionar los usuarios
-          externos.
-          <br />
-          Podrás ver la lista de usuarios, filtrarlos por rol y eliminarlos,
-          además puedes registrar un nuevo usuario siempre que sea
-          administrativo o personal docente.
+          Aqui podrás crear y listar los usuarios externos como estudiantes o
+          invitados.
         </Heading>
       </div>
       <div className="flex flex-row items-center">
@@ -162,11 +137,7 @@ const UsuariosAdminPage = () => {
           </div>
 
           {/* DataTable */}
-          <DataTable
-            columns={columns}
-            data={paginatedUsers}
-            actions={actions}
-          />
+          <DataTable columns={columns} data={paginatedUsers} />
 
           {/* Pagination */}
           <Pagination
@@ -177,9 +148,9 @@ const UsuariosAdminPage = () => {
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
           <Heading level={2}>
-            Registrar usario externo(administrativo o docente)
+            Registrar usario externo(estudiante o invitado)
           </Heading>
-          <RegisterAdminUser setRender={setRender} render={render} />
+          <RegisterGuardiaUser setRender={setRender} render={render} />
         </div>
       </div>
     </>

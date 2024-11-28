@@ -47,6 +47,8 @@ const ParqueaderoGuardiasPage = () => {
     enabled: !!token,
   });
 
+  
+
   const updateParkingPlaceMutation = useMutation({
     mutationFn: updateParkingPlaceStatus,
     onSuccess: (_, { parkingPlaceId, newStatus }) => {
@@ -60,13 +62,12 @@ const ParqueaderoGuardiasPage = () => {
     },
   });
 
-  const handleShowEspacios = (parkingPlace) => {
-    setSelectedParkingPlace(
-      selectedParkingPlace && selectedParkingPlace._id === parkingPlace._id ?
-        null
-      : parkingPlace,
-    );
-  };
+ const handleShowEspacios = (parkingPlace) => {
+   if (selectedParkingPlace && selectedParkingPlace._id === parkingPlace._id) {
+     return;
+   }
+   setSelectedParkingPlace(parkingPlace);
+ };
 
   const handleAllOccupied = (allOccupied) => {
     if (selectedParkingPlace) {

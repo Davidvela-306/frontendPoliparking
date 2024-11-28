@@ -1,51 +1,28 @@
-import { useState } from "react";
 import { FormularioG, CardPerfilG } from "@components/Perfil/index";
+import { Heading } from "@/components/ui/text";
 
 const PerfilGuardiasPage = () => {
-  const [showForm, setShowForm] = useState(false);
-  const toggleForm = () => {
-    setShowForm(!showForm);
-  };
-
   return (
-    <>
-      <div>
-        <h1 className="font-black text-4xl text-gray-500">Perfil</h1>
-        <hr className="my-4" />
+    <div className="mt-10 flex flex-col items-center justify-center ">
+      <div className="text-center mb-6">
+        <Heading level={4}>Perfil</Heading>
+        <Heading level={1}>
+          Aquí Puedes ver tus datos de perfil y actualizarlos
+        </Heading>
       </div>
 
-      <div>
-        <img
-          src="https://cdn-icons-png.flaticon.com/128/4898/4898073.png"
-          alt="img-client"
-          className="m-auto"
-          width={120}
-          height={120}
-        />
-      </div>
-
-      <div className="flex justify-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap">
-        <div className="w-full md:w-1/2">
+      <div className="flex justify-center align-center flex-row gap-8 md:gap-12 w-full max-w-7xl mx-auto">
+        {/* Card Perfil */}
+        <div className="flex-1 h-full self-center justify-center">
           <CardPerfilG />
         </div>
-        {showForm && (
-          <div className="w-full md:w-1/2">
-            <FormularioG />
-          </div>
-        )}
+
+        {/* Formulario */}
+        <div className="flex-1 h-full self-center">
+          <FormularioG />
+        </div>
       </div>
-      <br />
-      <br />
-      <div className="text-center mb-4">
-        <button
-          type="button"
-          className="bg-cyan-600 hover:bg-cyan-900 text-white font-bold py-3 px-5 rounded"
-          onClick={toggleForm}
-        >
-          {showForm ? "Cancelar" : "Actualizar"}
-        </button>
-      </div>
-    </>
+    </div>
   );
 };
 

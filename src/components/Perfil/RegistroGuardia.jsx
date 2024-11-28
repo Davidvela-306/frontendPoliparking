@@ -1,96 +1,89 @@
 import { useForm } from "react-hook-form";
+import { AlertText, Button, Label, Input } from "@components/ui/index";
 import { useAuth } from "../../context/AuthContext";
-import { AlertText } from "../../components/ui/AlertText";
-import { Input, Button, Label } from "../../components/ui";
-import { fetchPost } from "../../helpers/request_functions";
-import { baseAdmin } from "../../helpers/instances_routes";
-const RegistroGuardia = () => {
-  const { token, setToken } = useAuth();
+import adminService from "@/services/adminService";
+
+/**
+ * Component for registering a new Guard in the platform.
+ *
+ * It is responsible for displaying a form so that the administrator can register a new guard.
+ * After the form is submitted, a request is made to the server to create the guard.
+ * If the request is successful, the component that is in the `render` state is rendered.
+ * If the request fails, an error message is displayed.
+ *
+ * @param {function} setRender Function to change the `render` state.
+ * @param {boolean} render `render` state.
+ * @returns {JSX.Element} A form to register a new guard.
+ */
+const RegistroGuardia = ({ setRender, render }) => {
+  const { token } = useAuth();
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+  });
+
   const onSubmit = async (values) => {
     try {
-      const response = await fetchPost(
-        baseAdmin,
-        "/registrar-guardia",
-        values,
-        token,
-      );
-      console.log(response);
-      setToken(token);
+      const user = { ...values, estado: true };
+      console.log("Sending user data:", user);
+      const response = await adminService.createGuardia({ token, user });
+
+      console.log("Received response:", response);
+
+      if (response) {
+        setRender(!render);
+        alert("Guardia creado correctamente");
+      } else {
+        alert("Error al crear el Guardia: no se recibió una respuesta válida");
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Full error details:", error);
+      alert(`Error al crear el Guardia: ${error.message}`);
     }
   };
+
+  const fields = [
+    { label: "Nombre", name: "nombre", type: "text" },
+    { label: "Apellido", name: "apellido", type: "text" },
+    { label: "Cédula", name: "cedula", type: "number" },
+    { label: "Email", name: "email", type: "email" },
+    { label: "Contraseña", name: "password", type: "password" },
+    { label: "Teléfono", name: "telefono", type: "number" },
+  ];
+
   return (
-    <>
+    <div className="flex flex-col w-full gap-4 align-middle justify-center items-center">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
-        <div className="w-full flex justify-between">
-          <Label text="Nombre" />
-          {errors.nombre && <AlertText text="El campo es obligatorio" />}
-        </div>
-        <Input
-          type="nombre"
-          placeholder="Juan"
-          {...register("nombre", { required: true })}
-        />
-
-        <div className="w-full flex justify-between">
-          <Label text="Apellido" />
-          {errors.apellido && <AlertText text="El campo es obligatorio" />}
-        </div>
-        <Input
-          type="apellido"
-          placeholder="Perez"
-          {...register("apellido", { required: true })}
-        />
-
-        <div className="w-full flex justify-between">
-          <Label text="Cedula" />
-          {errors.cedula && <AlertText text="El campo es obligatorio" />}
-        </div>
-        <Input
-          type="number"
-          placeholder="1717171717"
-          {...register("cedula", { required: true })}
-        />
-
-        <div className="w-full flex justify-between">
-          <Label text="Email" />
-          {errors.email && <AlertText text="El campo es obligatorio" />}
-        </div>
-        <Input
-          type="email"
-          placeholder="Juan@guardia.com"
-          {...register("email", { required: true })}
-        />
-
-        <div className="w-full flex justify-between">
-          <Label text="Password" />
-          {errors.password && <AlertText text="El campo es obligatorio" />}
-        </div>
-        <Input
-          type="password"
-          placeholder="guardia1234"
-          {...register("password", { required: true })}
-        />
-
-        <div className="w-full flex justify-between">
-          <Label text="Telefono" />
-          {errors.telefono && <AlertText text="El campo es obligatorio" />}
-        </div>
-        <Input
-          type="number"
-          placeholder="0999999999"
-          {...register("telefono", { required: true })}
-        />
-
-        <Button type="submit">Guardar</Button>
+        {fields.map((field, index) => (
+          <div key={index} className="w-full flex justify-between my-1">
+            <Label
+              text={field.label}
+              className="flex text-azul-10 justify-center items-center"
+            />
+            <Input
+              type={field.type}
+              placeholder={field.label}
+              className={`border ${
+                errors[field.name] ? "border-red-500" : "border-gray-300"
+              } rounded-md p-2`}
+              {...register(field.name, {
+                required: "Este campo es obligatorio",
+              })}
+            />
+          </div>
+        ))}
+        {Object.keys(errors).length > 0 && (
+          <AlertText text="Debe llenar todos los campos correctamente" />
+        )}
+        <Button type="submit" disabled={!isValid}>
+          Registrar Guardia
+        </Button>
       </form>
-    </>
+    </div>
   );
 };
 

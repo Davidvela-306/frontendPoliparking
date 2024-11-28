@@ -18,6 +18,9 @@ export const theme = {
       amarillo: {
         10: "#F6B859",
       },
+      negro: {
+        10: "#000000",
+      },
     },
   },
 };

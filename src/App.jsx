@@ -19,6 +19,7 @@ import {
 import {
   ParqueaderosGuardiasPage,
   PerfilGuardiasPage,
+  UsuariosGuardiasPage,
 } from "@pages/Guardias/index";
 
 import {
@@ -128,6 +129,14 @@ function App() {
               element={
                 <GuardiaLayout>
                   <PerfilGuardiasPage />
+                </GuardiaLayout>
+              }
+            />
+            <Route
+              path="/guardias/usuarios"
+              element={
+                <GuardiaLayout>
+                  <UsuariosGuardiasPage />
                 </GuardiaLayout>
               }
             />

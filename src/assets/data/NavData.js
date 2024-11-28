@@ -30,6 +30,11 @@ const guardiaNavData = [
   },
   {
     id: 2,
+    title: "Usuarios",
+    path: "/guardias/usuarios",
+  },
+  {
+    id: 3,
     title: "Parqueaderos",
     path: "/guardias/parqueaderos",
   },

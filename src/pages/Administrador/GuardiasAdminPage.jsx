@@ -1,91 +1,162 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@context/AuthContext";
-import { fetchGet } from "@helpers/request_functions";
-import { baseAdmin } from "@helpers/instances_routes";
 import { RegistroGuardia } from "@components/Perfil/index";
+import DataTable from "@/components/common/DataTable";
+import adminService from "@/services/adminService";
+import { Pagination } from "@/components/common/index";
+import { Heading } from "@/components/ui/text/index";
 
+/**
+ * Componente que muestra la lista de guardias y permite eliminarlos o cambiar
+ * su estado. También permite registrar nuevos guardias.
+ *
+ */
 const GuardiasAdminPage = () => {
+  const [filterGuardias, setFilterGuardias] = useState([]);
+  const [render, setRender] = useState(false);
   const { token } = useAuth();
-  const [users, setUsers] = useState([]);
-  const [formType, setFormType] = useState(null);
+
+  const fetchUsers = async (token) => {
+    const response = await adminService.getGuardias(token);
+    return response;
+  };
 
   useEffect(() => {
-    if (token) {
-      getUsers();
-    }
-  }, [token]);
+    fetchUsers({ token }).then((fetchedUsers) => {
+      setFilterGuardias(fetchedUsers);
+    });
+  }, [token, render]);
 
-  const getUsers = async () => {
-    try {
-      const response = await fetchGet(baseAdmin, "/listar-guardias", token);
-      setUsers(response.data);
-    } catch (error) {
-      console.error(error);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const columns = [
+    { key: "nombre", label: "Nombre" },
+    { key: "apellido", label: "Apellido" },
+    { key: "cedula", label: "Cédula" },
+    { key: "email", label: "Email" },
+    { key: "telefono", label: "Teléfono" },
+    { key: "estado", label: "Estado" },
+  ];
+  // TODO: Cambiar el estado de un guardia
+  const actions = [
+    {
+      label: "Eliminar",
+      style: "bg-red-500 h-10",
+      onClick: (item) => handleDeleteGuardia(item._id, item.email),
+    },
+    {
+      label: "Cambiar estado",
+      style: "bg-yellow-500 h-10",
+      onClick: (item) => {
+        handleChangeState(item._id, item.email, !item.estado);
+      },
+    },
+  ];
+
+  // Filtering Logic
+  const filteredUsers = useMemo(() => {
+    let filtered = filterGuardias;
+
+    // Apply search term filter if specified
+    if (searchTerm) {
+      filtered = filtered.filter((user) =>
+        Object.values(user).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase()),
+        ),
+      );
+    }
+
+    return filtered;
+  }, [filterGuardias, searchTerm]);
+
+  // Pagination
+  const paginatedUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredUsers.slice(startIndex, endIndex);
+  }, [filteredUsers, currentPage, itemsPerPage]);
+
+  const handleDeleteGuardia = (id, email) => {
+    if (window.confirm(`Deseas eliminar al usuario ${email}?`)) {
+      console.log("handleDeleteGuardia \n");
+      console.log(id, email);
+
+      setFilterGuardias(filterGuardias.filter((user) => user._id !== id));
+      adminService
+        .deleteGuardia(token, id)
+        .then(() => {
+          alert("Guardia eliminado correctamente");
+        })
+        .catch((error) => {
+          alert("Error al eliminar el usuario:", error);
+        });
+    }
+  };
+  const handleChangeState = (id, email, state) => {
+    console.log("handleChangeState \n");
+    console.log(id, email, state);
+
+    if (window.confirm(`Deseas cambiar el estado del guardia ${email}?`)) {
+      adminService
+        .changeGuardiaState(token, id, state)
+        .then(() => {
+          alert("Ha cambiado el estado del guardia");
+        })
+        .catch((error) => {
+          alert("Error al cambiar el estado:", error);
+        });
     }
   };
 
-  const showPerfilForm = () => {
-    setFormType("perfil");
-  };
-
-  const hideForms = () => {
-    setFormType(null);
+  const handleSearchChange = (e) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+    setCurrentPage(1);
   };
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-10 text-azul-10">Guardias</h1>
-      <div className="h-[90vh]">
-        <div className="text-center mb-4">
-          <button
-            type="button"
-            className="bg-green-700 hover:bg-green-500 text-white font-bold py-3 px-5 rounded"
-            onClick={formType === "perfil" ? hideForms : showPerfilForm}
-          >
-            {formType === "perfil" ? "Cancelar" : "Registrar Guardia"}
-          </button>
-        </div>
-        <hr />
-        {formType === "perfil" && (
-          <div className="w-full md:w-1/2 mx-auto mt-4">
-            <RegistroGuardia />
+      <div className="mb-5 text-justify gap-y-10">
+        <Heading level={4}>Gestión de Guardias</Heading>
+        <Heading level={1}>
+          En esta sección podrás crear, eliminar y cambiar el estado de los
+          guardias.
+        </Heading>
+      </div>
+      <div className="flex flex-row items-center">
+        <div className="container mx-auto px-4 py-8">
+          {/* Search Input */}
+          <div className="mb-4">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              placeholder="Buscar por nombre, apellido, cédula, email o teléfono"
+              className="w-full px-3 py-2 border-solid border-4 border-negro rounded"
+            />
           </div>
-        )}
-        <table className="min-w-full bg-white border border-gray-300 mt-4">
-          <thead className="bg-azul-20 text-white border-solid border-t-2 border-gray-300">
-            <tr>
-              <th className="px-4 py-2 text-left font-semibold">Nombre</th>
-              <th className="px-4 py-2 text-left font-semibold">Apellido</th>
-              <th className="px-4 py-2 text-left font-semibold">Cédula</th>
-              <th className="px-4 py-2 text-left font-semibold">Email</th>
-              <th className="px-4 py-2 text-left font-semibold">Teléfono</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr
-                className="hover:bg-gray-100 border-solid border-t-2 border-gray-300"
-                key={user._id}
-              >
-                <td className="px-4 py-2 border-b border-gray-300">
-                  {user.nombre}
-                </td>
-                <td className="px-4 py-2 border-b border-gray-300">
-                  {user.apellido}
-                </td>
-                <td className="px-4 py-2 border-b border-gray-300">
-                  {user.cedula}
-                </td>
-                <td className="px-4 py-2 border-b border-gray-300">
-                  {user.email}
-                </td>
-                <td className="px-4 py-2 border-b border-gray-300">
-                  {user.telefono}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+          {/* DataTable */}
+          <DataTable
+            columns={columns}
+            data={paginatedUsers}
+            actions={actions}
+          />
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
+            onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
+          />
+        </div>
+        <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
+          <Heading level={2}>Registrar nuevo guardia</Heading>
+          <RegistroGuardia setRender={setRender} render={render} />
+        </div>
       </div>
     </>
   );
