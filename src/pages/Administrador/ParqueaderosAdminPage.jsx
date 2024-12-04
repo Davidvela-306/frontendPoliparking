@@ -5,6 +5,7 @@ import { fetchGet, fetchPatch } from "@helpers/request_functions";
 import { baseGuardias } from "@helpers/instances_routes";
 import { Espacios } from "@components/ui/index";
 import { Input } from "@components/ui/index";
+import { Heading } from "@/components/ui/text";
 
 const fetchParkingPlaces = async (token) => {
   const response = await fetchGet(
@@ -47,8 +48,6 @@ const ParqueaderoGuardiasPage = () => {
     enabled: !!token,
   });
 
-  
-
   const updateParkingPlaceMutation = useMutation({
     mutationFn: updateParkingPlaceStatus,
     onSuccess: (_, { parkingPlaceId, newStatus }) => {
@@ -62,12 +61,12 @@ const ParqueaderoGuardiasPage = () => {
     },
   });
 
- const handleShowEspacios = (parkingPlace) => {
-   if (selectedParkingPlace && selectedParkingPlace._id === parkingPlace._id) {
-     return;
-   }
-   setSelectedParkingPlace(parkingPlace);
- };
+  const handleShowEspacios = (parkingPlace) => {
+    if (selectedParkingPlace && selectedParkingPlace._id === parkingPlace._id) {
+      return;
+    }
+    setSelectedParkingPlace(parkingPlace);
+  };
 
   const handleAllOccupied = (allOccupied) => {
     if (selectedParkingPlace) {
@@ -106,8 +105,12 @@ const ParqueaderoGuardiasPage = () => {
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-10 text-azul-10">Parqueaderos</h1>
-
+      <Heading level={4}>Plazas de estacionamiento</Heading>
+      <Heading level={1}>
+        Aquí encontrarás las plazas de estacionamiento que están disponibles,
+        marcadas de color verde, y las que no, marcadas de color rojo
+      </Heading>
+      <br />
       <div className="mb-4">
         <Input
           type="text"

@@ -103,6 +103,7 @@ const GuardiasAdminPage = () => {
       adminService
         .changeGuardiaState(token, id, state)
         .then(() => {
+          setRender(!render);
           alert("Ha cambiado el estado del guardia");
         })
         .catch((error) => {

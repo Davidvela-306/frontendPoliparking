@@ -13,7 +13,6 @@
  * @returns {ReactElement} - A JSX element representing the table.
  */
 
-
 const DataTable = ({ columns, data, actions }) => {
   if (!data || data.length === 0) {
     return <p>No hemos encontrado coincidencias</p>;
@@ -50,7 +49,13 @@ const DataTable = ({ columns, data, actions }) => {
             {columns.map((column) => (
               <td
                 key={column.key}
-                className="px-4 py-2 border-b border-gray-300"
+                className={`px-4 py-2 border-b border-gray-300 ${
+                  typeof item[column.key] === "boolean" ?
+                    item[column.key] ?
+                      "text-green-500"
+                    : "text-gray-500"
+                  : ""
+                }`}
               >
                 {typeof item[column.key] === "string" ?
                   item[column.key]
