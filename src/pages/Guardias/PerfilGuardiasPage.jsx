@@ -5,8 +5,8 @@ const PerfilGuardiasPage = () => {
   return (
     <div className=" mt-10 flex flex-col items-center justify-start ">
       <div className="mb-6 w-full">
-        <Heading level={4}>Perfil</Heading>
-        <Heading level={1}>
+        <Heading level="4">Perfil</Heading>
+        <Heading level="1">
           Este módulo te permite gestionar tu perfil personal.
         </Heading>
       </div>

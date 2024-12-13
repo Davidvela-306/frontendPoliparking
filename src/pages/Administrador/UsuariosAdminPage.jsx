@@ -107,8 +107,8 @@ const UsuariosAdminPage = () => {
   return (
     <>
       <div className="mb-6 w-full">
-        <Heading level={4}>Usuarios externos</Heading>
-        <Heading level={1}>
+        <Heading level="4">Usuarios externos</Heading>
+        <Heading level="1">
           Este módulo te permite gestionar usuarios externos( personal
           administrativo, docente e invitado)
         </Heading>

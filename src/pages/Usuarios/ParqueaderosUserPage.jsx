@@ -106,8 +106,8 @@ const ParqueaderoGuardiasPage = () => {
   return (
     <>
       <div className="mb-6 w-full">
-        <Heading level={4}>Plazas de estacionamiento</Heading>
-        <Heading level={1}>
+        <Heading level="4">Plazas de estacionamiento</Heading>
+        <Heading level="1">
           Este módulo te permite gestionar las plazas de estacionamiento del
           parqueadero de la ESFOT.
         </Heading>

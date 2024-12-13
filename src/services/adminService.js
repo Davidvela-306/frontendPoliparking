@@ -141,6 +141,22 @@ const adminService = {
       console.error("Error:", error);
     }
   },
+  /* 
+  GET http://localhost:3000/api/administrador/disponibilidad-parqueadero
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NTkwOTExYjFhNzUwM2I4MzIxNDQzZCIsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3MzQxMjA0OTQsImV4cCI6MTczNDIwNjg5NH0.mFwDwp-z6Pt6qyTwCMmt5P1msOFO0TMlV3xXJubnSYQ */
+  async getParqueaderos({ token }) {
+    try {
+      const response = await fetchGet(
+        baseAdmin,
+        "/disponibilidad-parqueadero",
+        token,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      throw error;
+    }
+  },
 };
 
 export default adminService;

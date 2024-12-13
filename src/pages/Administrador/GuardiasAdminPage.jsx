@@ -121,8 +121,8 @@ const GuardiasAdminPage = () => {
   return (
     <>
       <div className="mb-5 text-justify gap-y-10">
-        <Heading level={4}>Guardias</Heading>
-        <Heading level={1}>Este módulo te permite gestionar guardias.</Heading>
+        <Heading level='4'>Guardias</Heading>
+        <Heading level='1'>Este módulo te permite gestionar guardias.</Heading>
       </div>
       <div className="flex flex-row">
         <div className="container mx-auto px-4 py-8">
