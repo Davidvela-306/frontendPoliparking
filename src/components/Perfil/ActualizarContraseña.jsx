@@ -31,25 +31,25 @@ const ActualizarContraseña = () => {
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
         <div className="w-full flex justify-between ">
-          <Label text="actualPassword" />
+          <Label text="Contraseña actual" />
           {errors.nombre && <AlertText text="El campo es obligatorio" />}
         </div>
         <Input
           type="contraseña"
-          placeholder="ContraseñaActual"
+          placeholder="********"
           {...register("actualPassword", { required: true })}
         />
 
         <div className="w-full flex justify-between">
-          <Label text="nuevoPassword" />
+          <Label text="Nueva contraseña" />
           {errors.apellido && <AlertText text="El campo es obligatorio" />}
         </div>
         <Input
           type="contraseña"
-          placeholder="NuevaContraseña"
+          placeholder="********"
           {...register("nuevoPassword", { required: true })}
         />
-        <Button type="submit">Actualizar</Button>
+        <Button type="submit">Actualizar Contraseña</Button>
       </form>
     </>
   );

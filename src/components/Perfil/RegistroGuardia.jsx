@@ -80,7 +80,7 @@ const RegistroGuardia = ({ setRender, render }) => {
           <AlertText text="Debe llenar todos los campos correctamente" />
         )}
         <Button type="submit" disabled={!isValid}>
-          Registrar Guardia
+          Registrar
         </Button>
       </form>
     </div>

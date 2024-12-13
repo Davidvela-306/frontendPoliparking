@@ -55,13 +55,13 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
   };
 
   const fields = [
-    { label: "Nombre", name: "nombre", type: "text" },
-    { label: "Apellido", name: "apellido", type: "text" },
-    { label: "Cedula", name: "cedula", type: "number" },
-    { label: "Email", name: "email", type: "email" },
-    { label: "Contraseña", name: "password", type: "password" },
-    { label: "Telefono", name: "telefono", type: "number" },
-    { label: "Placa", name: "placa_vehiculo", type: "text" },
+    { label: "Nombre", name: "nombre", type: "text", placeholder: "Joe" },
+    { label: "Apellido", name: "apellido", type: "text", placeholder: "Doe" },
+    { label: "Cedula", name: "cedula", type: "number", placeholder: "174695953" },
+    { label: "Email", name: "email", type: "email", placeholder: "JoeDoe@gmail.com" },
+    { label: "Contraseña", name: "password", type: "password", placeholder: "********" },
+    { label: "Telefono", name: "telefono", type: "number", placeholder: "099856953" },
+    { label: "Placa", name: "placa_vehiculo", type: "text", placeholder: "ABC-123" },
     {
       label: "Rol",
       name: "rol",
@@ -98,7 +98,7 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
               </select>
             : <Input
                 type={field.type}
-                placeholder={field.label}
+                placeholder={field.placeholder}
                 className={` border ${
                   errors[field.name] ? "border-red-500" : "border-gray-300"
                 } rounded-md p-2`}

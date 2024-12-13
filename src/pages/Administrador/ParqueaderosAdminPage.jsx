@@ -105,12 +105,13 @@ const ParqueaderoGuardiasPage = () => {
 
   return (
     <>
-      <Heading level={4}>Plazas de estacionamiento</Heading>
-      <Heading level={1}>
-        Aquí encontrarás las plazas de estacionamiento que están disponibles,
-        marcadas de color verde, y las que no, marcadas de color rojo
-      </Heading>
-      <br />
+      <div className="mb-6 w-full">
+        <Heading level={4}>Plazas de estacionamiento</Heading>
+        <Heading level={1}>
+          Este módulo te permite gestionar las plazas de estacionamiento del
+          parqueadero de la ESFOT.
+        </Heading>
+      </div>
       <div className="mb-4">
         <Input
           type="text"

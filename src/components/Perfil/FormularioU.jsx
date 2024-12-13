@@ -59,7 +59,7 @@ const FormularioU = () => {
         />
 
         <div className="w-full flex justify-between">
-          <Label text="Placa_vehiculo" />
+          <Label text="Placa del vehículo" />
           {errors.apellido && <AlertText text="El campo es obligatorio" />}
         </div>
         <Input
@@ -69,16 +69,16 @@ const FormularioU = () => {
         />
 
         <div className="w-full flex justify-between">
-          <Label text="Telefono" />
+          <Label text="Teléfono" />
           {errors.telefono && <AlertText text="El campo es obligatorio" />}
         </div>
         <Input
           type="number"
-          placeholder="0999999999"
+          placeholder="0998645878"
           {...register("telefono", { required: true })}
         />
 
-        <Button type="submit">Actualizar</Button>
+        <Button type="submit">Actualizar Perfil</Button>
       </form>
     </>
   );

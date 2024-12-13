@@ -18,7 +18,7 @@ const adminNavData = [
   },
   {
     id: 3,
-    title: "Parqueaderos",
+    title: "Plazas de estacionamiento",
     path: "/administrador/parqueaderos",
   },
 ];
@@ -35,7 +35,7 @@ const guardiaNavData = [
   },
   {
     id: 3,
-    title: "Parqueaderos",
+    title: "Plazas de estacionamiento",
     path: "/guardias/parqueaderos",
   },
 ];
@@ -47,7 +47,7 @@ const usuarioNavData = [
   },
   {
     id: 2,
-    title: "Parqueaderos",
+    title: "Plazas de estacionamiento",
     path: "/usuarios/parquedero",
   },
 ];

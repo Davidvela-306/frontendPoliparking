@@ -33,9 +33,9 @@ const DataTable = ({ columns, data, actions }) => {
               {column.label}
             </th>
           ))}
-          {actions && (
-            <th className="px-4 py-2 text-left text-amarillo-10 font-semibold">
-              Acciones
+          {actions && actions.length > 0 && (
+            <th className="px-4 py-2 text-center text-amarillo-10 font-semibold">
+              {actions.length > 1 ? "Acciones" : "Acción"}
             </th>
           )}
         </tr>

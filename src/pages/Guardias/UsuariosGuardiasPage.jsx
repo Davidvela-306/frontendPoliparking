@@ -86,10 +86,9 @@ const UsuariosAdminPage = () => {
   return (
     <>
       <div className="mb-5 text-justify gap-y-10">
-        <Heading level={4}>Gestión de Usuarios</Heading>
+        <Heading level={4}>Usuarios Externos</Heading>
         <Heading level={1}>
-          Aqui podrás crear y listar los usuarios externos como estudiantes o
-          invitados.
+          Este módulo te permite gestionar usuarios externos( Estudiantes e invitados) de la ESFOT.
         </Heading>
       </div>
       <div className="flex flex-row items-center">
@@ -148,7 +147,7 @@ const UsuariosAdminPage = () => {
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
           <Heading level={2}>
-            Registrar usario externo(estudiante o invitado)
+            Registrar usario externo
           </Heading>
           <RegisterGuardiaUser setRender={setRender} render={render} />
         </div>

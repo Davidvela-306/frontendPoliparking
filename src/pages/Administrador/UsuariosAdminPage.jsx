@@ -106,18 +106,14 @@ const UsuariosAdminPage = () => {
 
   return (
     <>
-      <div className="mb-5 text-justify gap-y-10">
-        <Heading level={4}>Gestión de Usuarios</Heading>
+      <div className="mb-6 w-full">
+        <Heading level={4}>Usuarios externos</Heading>
         <Heading level={1}>
-          Este módulo está diseñada para que puedas gestionar los usuarios
-          externos.
-          <br />
-          Podrás ver la lista de usuarios, filtrarlos por rol y eliminarlos,
-          además puedes registrar un nuevo usuario siempre que sea
-          administrativo o personal docente.
+          Este módulo te permite gestionar usuarios externos( personal
+          administrativo, docente e invitado)
         </Heading>
       </div>
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row">
         <div className="container mx-auto px-4 py-8">
           {/* Search Input */}
           <div className="mb-4">
@@ -176,9 +172,7 @@ const UsuariosAdminPage = () => {
           />
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
-          <Heading level={2}>
-            Registrar usario externo(administrativo o docente)
-          </Heading>
+          <Heading level={2}>Registrar usario externo</Heading>
           <RegisterAdminUser setRender={setRender} render={render} />
         </div>
       </div>
