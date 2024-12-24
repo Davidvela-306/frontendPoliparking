@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import { useAuth } from "@context/AuthContext";
 import adminService from "@/services/adminService";
 import { Pagination, DataTable } from "@/components/common/index";
-import { Heading } from "@/components/ui/text/index";
 import RegisterAdminUser from "@/components/RegisterAdminUser";
 
 /**
@@ -106,12 +105,13 @@ const UsuariosAdminPage = () => {
 
   return (
     <>
-      <div className="mb-6 w-full">
-        <Heading level="4">Usuarios externos</Heading>
-        <Heading level="1">
+     
+      <div className="mb-5 text-justify flex flex-col">
+        <h className="text-4xl text-azul-10 font-bold">Usuarios externos</h>
+        <h className="text-1xl text-azul-10">
           Este módulo te permite gestionar usuarios externos( personal
           administrativo, docente e invitado)
-        </Heading>
+        </h>
       </div>
       <div className="flex flex-row">
         <div className="container mx-auto px-4 py-8">
@@ -172,7 +172,7 @@ const UsuariosAdminPage = () => {
           />
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
-          <Heading level={2}>Registrar usario externo</Heading>
+          <p className="text-2xl text-azul-10 font-bold">Registrar usario externo</p>
           <RegisterAdminUser setRender={setRender} render={render} />
         </div>
       </div>

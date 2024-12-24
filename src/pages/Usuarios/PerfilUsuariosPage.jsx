@@ -3,16 +3,15 @@ import {
   FormularioU,
   ActualizarContraseña,
 } from "@components/Perfil/index";
-import { Heading } from "@/components/ui/text";
 
 const PerfilUsuarios = () => {
   return (
     <div className=" mt-10 flex flex-col items-center justify-start ">
-      <div className="mb-6 w-full">
-        <Heading level="4">Perfil</Heading>
-        <Heading level="1">
+      <div className="mb-5 text-justify flex flex-col">
+        <h className="text-4xl text-azul-10 font-bold">Perfil</h>
+        <h className="text-1xl text-azul-10">
           Este módulo te permite gestionar tu perfil personal.
-        </Heading>
+        </h>
       </div>
 
       <div className="flex justify-center align-center flex-row gap-8 md:gap-12 w-full max-w-7xl mx-auto">

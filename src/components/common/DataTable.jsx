@@ -49,7 +49,7 @@ const DataTable = ({ columns, data, actions }) => {
             {columns.map((column) => (
               <td
                 key={column.key}
-                className={`px-4 py-2 border-b border-gray-300 ${
+                className={`px-1 py-2 border-b border-gray-300 ${
                   typeof item[column.key] === "boolean" ?
                     item[column.key] ?
                       "text-green-500"

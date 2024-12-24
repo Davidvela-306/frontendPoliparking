@@ -4,7 +4,6 @@ import { RegistroGuardia } from "@components/Perfil/index";
 import DataTable from "@/components/common/DataTable";
 import adminService from "@/services/adminService";
 import { Pagination } from "@/components/common/index";
-import { Heading } from "@/components/ui/text/index";
 
 /**
  * Componente que muestra la lista de guardias y permite eliminarlos o cambiar
@@ -120,9 +119,11 @@ const GuardiasAdminPage = () => {
 
   return (
     <>
-      <div className="mb-5 text-justify gap-y-10">
-        <Heading level='4'>Guardias</Heading>
-        <Heading level='1'>Este módulo te permite gestionar guardias.</Heading>
+      <div className="mb-5 text-justify flex flex-col">
+        <h className="text-4xl text-azul-10 font-bold">Guardias</h>
+        <h className="text-1xl text-azul-10">
+          Este módulo te permite gestionar guardias.
+        </h>
       </div>
       <div className="flex flex-row">
         <div className="container mx-auto px-4 py-8">
@@ -152,7 +153,7 @@ const GuardiasAdminPage = () => {
           />
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
-          <Heading level={2}>Registrar nuevo guardia</Heading>
+          <p className="text-2xl text-azul-10 font-bold">Registrar nuevo guardia</p>
           <RegistroGuardia setRender={setRender} render={render} />
         </div>
       </div>
