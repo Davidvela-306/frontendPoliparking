@@ -13,54 +13,104 @@ import "@xyflow/react/dist/style.css";
 const initialNodes = [
   {
     id: "1",
-    position: { x: 100, y: 100 },
+    position: { x: 100, y: 70 },
     data: { label: "1" },
   },
   {
     id: "2",
-    position: { x: 350, y: 100 },
+    position: { x: 300, y: 70 },
     data: { label: "2" },
   },
   {
     id: "3",
-    position: { x: 450, y: 300 },
+    position: { x: 665, y: 320 },
     data: { label: "3" },
   },
   {
     id: "4",
-    position: { x: 450, y: 500 },
+    position: { x: 665, y: 500 },
     data: { label: "4" },
   },
   {
     id: "5",
-    position: { x: 350, y: 650 },
+    position: { x: 100, y: 700 },
     data: { label: "5" },
   },
   {
     id: "6",
-    position: { x: 100, y: 650 },
+    position: { x: 300, y: 700 },
     data: { label: "6" },
   },
 ];
 
-/**
- * A React component that displays a graph of parking spaces, with each node representing
- * a parking space and its color indicating whether it is occupied or not.
- *
- * The component connects to a socket.io server at http://localhost:3000 to receive
- * updates about the parking space states. The server should emit a "serialData" event
- * with the current state of each parking space as a string in the form "EstadoX:Y",
- * where X is the number of the parking space (1-6) and Y is the state of the parking
- * space (0 or 1).
- *
- * The component also implements a 1-minute timeout, so if it does not receive any
- * updates from the server for 1 minute, it will assume that the parking space is
- * unoccupied.
- *
- * @return {JSX.Element} A React component that displays a graph of parking spaces.
- */
+const containerNodes = [
+  {
+    id: "container-1",
+    position: { x: 75, y: 0 },
+    data: { label: "Marcelo Dávila" },
+    style: {
+      backgroundColor: "#f0f0f0",
+      width: 400,
+      height: 300,
+      border: "2px solid #ccc",
+      borderRadius: 15,
+      zIndex: -1,
+      fontSize: "30px",
+      fontWeight: "bold",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      paddingTop: "10px",
+    },
+    type: "default",
+  },
+  {
+    id: "container-2",
+    position: { x: 600, y: 275 },
+    data: { label: "Marcelo Dávila 2" },
+    style: {
+      backgroundColor: "#e0f7fa",
+      width: 300,
+      height: 400,
+      border: "2px solid #80deea",
+      borderRadius: 15,
+      zIndex: -1,
+      fontSize: "30px",
+      fontWeight: "bold",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      paddingTop: "10px",
+    },
+    type: "default",
+  },
+  {
+    id: "container-3",
+    position: { x: 75, y: 630 },
+    data: { label: "Esfot Posterior" },
+    style: {
+      backgroundColor: "#ffecb3",
+      width: 400,
+      height: 300,
+      border: "2px solid #ffd54f",
+      borderRadius: 15,
+      zIndex: -1,
+      fontSize: "30px",
+      fontWeight: "bold",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      paddingTop: "10px",
+    },
+    type: "default",
+  },
+];
+
 const ParkingSpacesGraph = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState([
+    ...initialNodes,
+    ...containerNodes,
+  ]);
   const [edges, onEdgesChange] = useEdgesState([]);
   const [spaceStates, setSpaceStates] = useState({
     1: null,
@@ -133,15 +183,28 @@ const ParkingSpacesGraph = () => {
 
   useEffect(() => {
     setNodes((nds) =>
-      nds.map((node) => ({
-        ...node,
-        style: {
-          backgroundColor: spaceStates[node.id] === "1" ? "green" : "red",
-          width: 150,
-          height: 70,
-          borderRadius: 10,
-        },
-      })),
+      nds.map((node) => {
+        if (!node.id.startsWith("container")) {
+          const isNarrowNode = ["1", "2", "5", "6"].includes(node.id);
+          return {
+            ...node,
+            style: {
+              backgroundColor: spaceStates[node.id] === "1" ? "green" : "red",
+              width: isNarrowNode ? 150 : 170,
+              height: isNarrowNode ? 170 : 150,
+              borderRadius: 10,
+              zIndex: 1,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "30px",
+              fontWeight: "bold",
+              color: "white",
+            },
+          };
+        }
+        return node;
+      }),
     );
   }, [spaceStates, setNodes]);
 

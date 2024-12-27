@@ -28,8 +28,8 @@ const ParqueaderosUserPage = () => {
             Plazas de estacionamiento
           </h>
           <h className="text-1xl text-azul-10">
-            Este módulo te permite gestionar las plazas de estacionamiento del
-            parqueadero de la ESFOT.
+            Este módulo te permite visualizar la disponibilidad de las plazas de
+            estacionamiento del parqueadero de la ESFOT.
           </h>
         </div>
 

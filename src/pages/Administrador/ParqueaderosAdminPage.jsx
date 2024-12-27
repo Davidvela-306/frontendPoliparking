@@ -9,6 +9,7 @@ import parkingService from "@/services/parkingService";
 
 const ParqueaderosAdminPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
   const { token } = useAuth();
 
   useEffect(() => {
@@ -21,9 +22,10 @@ const ParqueaderosAdminPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
-      nome: "",
+      nombre: "",
       description: "",
       planta: "",
       bloque: "",
@@ -34,9 +36,30 @@ const ParqueaderosAdminPage = () => {
   console.log("parkingSpaces", parkingSpaces);
 
   const onSubmit = (data) => {
-    console.log(data)
-    parkingService.updateParking(token, parkingSpaces[0]._id, data);
-    
+    console.log(data);
+    const objToSend = {
+      ...data,
+      //  TODO:  ELIMINAR ESTOS CAMPOS DESDE EL BACK Y FRONT:
+      tipo: "Automóvil y motos",
+      espacios: 9,
+      estado: true,
+    };
+    parkingService
+      .updateParking(token, parkingSpaces[0]._id, objToSend)
+      .then(() => {
+        setSubmitted(true);
+        reset();
+        // Actualiza la información del parqueadero en la pantalla
+        adminService.getParqueaderos({ token }).then((response) => {
+          setParkingSpaces(response);
+        });
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 3000);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   if (!parkingSpaces) {
@@ -60,11 +83,6 @@ const ParqueaderosAdminPage = () => {
             : "No hay parqueaderos cargados en el sistema"}
           </p>
         </div>
-        <div>
-          <button className="bg-azul-10 text-white px-4 py-2 rounded">
-            Cambiar estado de parqueadero
-          </button>
-        </div>
       </div>
 
       {parkingSpaces.map((parkingSpace) => (
@@ -75,31 +93,39 @@ const ParqueaderosAdminPage = () => {
           </div>
 
           {/* Formulario de actualización */}
-          <div className="flex-1 rounded-lg p-4 border border-azul-20 bg-gray-200">
-            <Card>
+          <div className="flex-1 rounded-lg p-8 border border-blue-200 bg-sky-200 shadow-sm flex justify-center items-center">
+            <Card className="bg-white w-full max-w-md">
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col gap-2"
+                className="flex flex-col gap-6 p-4"
               >
-                {/* Nome */}
-                <div>
-                  <Label text="Nombre del parqueadero" />
+                {/* Nombre */}
+                <div className="space-y-2">
+                  <Label
+                    text="Nombre del parqueadero"
+                    className="text-gray-700 font-medium"
+                  />
                   <Input
                     type="text"
                     placeholder="ESFOT"
-                    {...register("nome", {
+                    className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    {...register("nombre", {
                       required: "El nombre es obligatorio",
                     })}
                   />
-                  {errors.nome && <AlertText text={errors.nome.message} />}
+                  {errors.nombre && <AlertText text={errors.nombre.message} />}
                 </div>
 
                 {/* Descripción */}
-                <div>
-                  <Label text="Descripción" />
+                <div className="space-y-2">
+                  <Label
+                    text="Descripción"
+                    className="text-gray-700 font-medium"
+                  />
                   <Input
                     type="text"
                     placeholder="Parqueadero de la ESFOT"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     {...register("description", {
                       required: "La descripción es obligatoria",
                     })}
@@ -109,68 +135,62 @@ const ParqueaderosAdminPage = () => {
                   )}
                 </div>
 
-                {/* Planta */}
-                <div>
-                  <Label text="Planta" />
-                  <Input
-                    type="text"
-                    placeholder="1"
-                    {...register("planta", {
-                      required: "La planta es obligatoria",
-                    })}
-                  />
-                  {errors.planta && <AlertText text={errors.planta.message} />}
-                </div>
+                {/* Grid para Planta y Bloque */}
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Planta */}
+                  <div className="space-y-2">
+                    <Label
+                      text="Planta"
+                      className="text-gray-700 font-medium"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="1"
+                      className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      {...register("planta", {
+                        required: "La planta es obligatoria",
+                      })}
+                    />
+                    {errors.planta && (
+                      <AlertText text={errors.planta.message} />
+                    )}
+                  </div>
 
-                {/* Bloque */}
-                <div>
-                  <Label text="Bloque" />
-                  <Input
-                    type="text"
-                    placeholder="A"
-                    {...register("bloque", {
-                      required: "El bloque es obligatorio",
-                    })}
-                  />
-                  {errors.bloque && <AlertText text={errors.bloque.message} />}
-                </div>
-
-                {/* Tipo de vehículo */}
-                <div>
-                  <Label text="Tipo de vehículo" />
-                  <select
-                    {...register("tipo", {
-                      required: "El tipo de vehículo es obligatorio",
-                    })}
-                    className="w-full p-2 rounded-md border"
-                  >
-                    <option value="" disabled hidden>
-                      Seleccione un tipo de vehículo
-                    </option>
-                    <option value="moto">Moto</option>
-                    <option value="vehiculo">Vehículo</option>
-                  </select>
-                  {errors.tipo && <AlertText text={errors.tipo.message} />}
-                </div>
-
-                {/* Espacios */}
-                <div>
-                  <Label text="Número de espacios" />
-                  <Input
-                    type="number"
-                    placeholder="7"
-                    {...register("espacios", {
-                      required: "El número de espacios es obligatorio",
-                      valueAsNumber: true,
-                    })}
-                  />
-                  {errors.espacios && (
-                    <AlertText text={errors.espacios.message} />
-                  )}
+                  {/* Bloque */}
+                  <div className="space-y-2">
+                    <Label
+                      text="Bloque"
+                      className="text-gray-700 font-medium"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="A"
+                      className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      {...register("bloque", {
+                        required: "El bloque es obligatorio",
+                      })}
+                    />
+                    {errors.bloque && (
+                      <AlertText text={errors.bloque.message} />
+                    )}
+                  </div>
                 </div>
 
                 {/* Botón de envío */}
-                <Button type="submit" className="mt-4">
+                {
+                  //formulario enviado correctamente
+                  submitted && (
+                    <div className="flex justify-center">
+                      <p className="text-green-500 font-bold">
+                        Parqueadero actualizado correctamente
+                      </p>
+                    </div>
+                  )
+                }
+                <Button
+                  type="submit"
+                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-md transition-colors"
+                >
                   Actualizar Parqueadero
                 </Button>
               </form>

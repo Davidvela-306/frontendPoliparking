@@ -1,5 +1,5 @@
 import { baseGuardias } from "@/helpers/instances_routes";
-import { fetchGet, fetchPost } from "@/helpers/request_functions";
+import { fetchGet, fetchPatch, fetchPost } from "@/helpers/request_functions";
 const guardiaService = {
   async getUser({ token }) {
     try {
@@ -12,6 +12,19 @@ const guardiaService = {
   async createExternalUser({ token, user }) {
     try {
       const response = await fetchPost(baseGuardias, "/registrar", user, token);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  },
+  async changeStatus(token, parkingId, data) {
+    try {
+      const response = await fetchPatch(
+        baseGuardias,
+        `/parqueaderos/${parkingId}`,
+        data,
+        token,
+      );
       return response.data;
     } catch (error) {
       console.error("Error:", error);

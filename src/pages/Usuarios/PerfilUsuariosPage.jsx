@@ -6,8 +6,8 @@ import {
 
 const PerfilUsuarios = () => {
   return (
-    <div className=" mt-10 flex flex-col items-center justify-start ">
-      <div className="mb-5 text-justify flex flex-col">
+    <div className=" mt-10 flex flex-col items-center justify-start">
+      <div className="mb-5 text-justify flex flex-col w-full">
         <h className="text-4xl text-azul-10 font-bold">Perfil</h>
         <h className="text-1xl text-azul-10">
           Este módulo te permite gestionar tu perfil personal.
