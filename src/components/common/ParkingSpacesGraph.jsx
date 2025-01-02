@@ -130,7 +130,7 @@ const ParkingSpacesGraph = () => {
   });
 
   useEffect(() => {
-    const socket = io("http://localhost:3000");
+    const socket = io("http://localhost:4000");
 
     socket.on("serialData", (data) => {
       const lines = data.split("\n");
