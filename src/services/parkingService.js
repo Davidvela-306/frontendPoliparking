@@ -1,6 +1,14 @@
 import { baseParqueaderos } from "@/helpers/instances_routes";
-import { fetchPut } from "@/helpers/request_functions";
+import { fetchPut, fetchGet } from "@/helpers/request_functions";
 const parkingService = {
+  async getParking(token) {
+    try {
+      const response = await fetchGet(baseParqueaderos, "/", token);
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  },
   /**
    * Updates a parking space.
    * @param {string} token - The authentication token to include in the request.

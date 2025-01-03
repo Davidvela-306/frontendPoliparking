@@ -7,41 +7,7 @@ import {
   useEdgesState,
 } from "@xyflow/react";
 import io from "socket.io-client";
-
 import "@xyflow/react/dist/style.css";
-
-const initialNodes = [
-  {
-    id: "1",
-    position: { x: 100, y: 70 },
-    data: { label: "1" },
-  },
-  {
-    id: "2",
-    position: { x: 300, y: 70 },
-    data: { label: "2" },
-  },
-  {
-    id: "3",
-    position: { x: 665, y: 320 },
-    data: { label: "3" },
-  },
-  {
-    id: "4",
-    position: { x: 665, y: 500 },
-    data: { label: "4" },
-  },
-  {
-    id: "5",
-    position: { x: 100, y: 700 },
-    data: { label: "5" },
-  },
-  {
-    id: "6",
-    position: { x: 300, y: 700 },
-    data: { label: "6" },
-  },
-];
 
 const containerNodes = [
   {
@@ -106,28 +72,29 @@ const containerNodes = [
   },
 ];
 
-const ParkingSpacesGraph = () => {
+const positions = [
+  { x: 100, y: 70 },
+  { x: 300, y: 70 },
+  { x: 665, y: 320 },
+  { x: 665, y: 500 },
+  { x: 100, y: 700 },
+  { x: 300, y: 700 },
+];
+
+const ParkingSpacesGraph = ({ spaces }) => {
+  const initialNodes = spaces.map((space, index) => ({
+    id: space.numeroEspacio,
+    position: positions[index],
+    data: { label: space.numeroEspacio },
+  }));
+
   const [nodes, setNodes, onNodesChange] = useNodesState([
     ...initialNodes,
     ...containerNodes,
   ]);
   const [edges, onEdgesChange] = useEdgesState([]);
-  const [spaceStates, setSpaceStates] = useState({
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-    5: null,
-    6: null,
-  });
-  const [lastActionTimes, setLastActionTimes] = useState({
-    1: null,
-    2: null,
-    3: null,
-    4: null,
-    5: null,
-    6: null,
-  });
+  const [spaceStates, setSpaceStates] = useState({});
+  const [lastActionTimes, setLastActionTimes] = useState({});
 
   useEffect(() => {
     const socket = io("http://localhost:4000");
@@ -159,27 +126,6 @@ const ParkingSpacesGraph = () => {
       socket.disconnect();
     };
   }, []);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setSpaceStates((prevSpaceStates) => {
-        const newSpaceStates = { ...prevSpaceStates };
-
-        Object.keys(lastActionTimes).forEach((spaceNumber) => {
-          const lastActionTime = lastActionTimes[spaceNumber];
-          if (lastActionTime !== null && Date.now() - lastActionTime > 60000) {
-            newSpaceStates[spaceNumber] = "0";
-          }
-        });
-
-        return newSpaceStates;
-      });
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [lastActionTimes]);
 
   useEffect(() => {
     setNodes((nds) =>

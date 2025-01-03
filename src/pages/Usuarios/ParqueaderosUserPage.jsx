@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { ParkingSpacesGraph } from "@/components/common";
-import adminService from "@/services/adminService";
+import parkingService from "@/services/parkingService";
 import { useAuth } from "@context/AuthContext";
 const ParqueaderosUserPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
   const { token } = useAuth();
   useEffect(() => {
-    adminService.getParqueaderos({ token }).then((response) => {
+    parkingService.getParking().then((response) => {
       setParkingSpaces(response);
     });
   }, [token]);
@@ -19,6 +19,10 @@ const ParqueaderosUserPage = () => {
   if (parkingSpaces.length === 0) {
     return <p>No hay parqueaderos cargados en el sistema</p>;
   }
+  console.log("parkingSpaces", parkingSpaces);
+  parkingSpaces.map((parkingSpace) => {
+    console.log("parkingSpace espacios", parkingSpace.espacios);
+  });
 
   return (
     <>
@@ -36,14 +40,11 @@ const ParqueaderosUserPage = () => {
         {parkingSpaces.map((parkingSpace) => (
           <div className="flex h-[70vh] gap-4" key={parkingSpace._id}>
             {/* añadir borde */}
-            <div className="flex-1 border-solid border-2 border-azul-20  rounded-lg p-4">
-              <ParkingSpacesGraph spaces={parkingSpace.espacios} />
-            </div>
-            {/* <div className="flex-1 border rounded-lg p-4 bg-amarillo-10 flex items-center">
-              <p className="text-1xl text-azul-10 text-center">
-                Las plazas de estacionamiento de color verde son libres y las de color rojo ocupadas. Tenlo en cuenta al momento de llegar al parqueadero de la facultad.
-              </p>
-            </div> */}
+            {parkingSpace.estado ?
+              <div className="flex-1 border-solid border-2 border-azul-20  rounded-lg p-4">
+                <ParkingSpacesGraph spaces={parkingSpace.espacios} />
+              </div>
+            : <p>El parqueadero se encuentra cerrado</p>}
           </div>
         ))}
       </div>
