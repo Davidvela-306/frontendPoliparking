@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   ReactFlow,
   Controls,
@@ -8,6 +8,34 @@ import {
 } from "@xyflow/react";
 import io from "socket.io-client";
 import "@xyflow/react/dist/style.css";
+
+const Legend = () => (
+  <div className="absolute bottom-4 right-4 bg-purple-200 p-4 rounded-lg shadow-lg z-50">
+    <h3 className="text-lg font-bold mb-2">Leyenda</h3>
+    <div className="space-y-2">
+      <div className="flex items-center">
+        <div className="w-7 h-7 rounded-full bg-blue-300 mr-2"></div>
+        <p className="text-sm">Persona con capacidad diferente</p>
+      </div>
+      <div className="flex items-center">
+        <div className="w-7 h-7 rounded-full bg-blue-300 border-4 border-solid border-green-600 mr-2"></div>
+        <p className="text-sm">Disponible</p>
+      </div>
+      <div className="flex items-center">
+        <div className="w-7 h-7 rounded-full bg-blue-300 border-4 border-solid border-red-500 mr-2"></div>
+        <p className="text-sm">No disponible o reservado</p>
+      </div>
+      <div className="flex items-center">
+        <div className="w-7 h-7 rounded-full bg-green-500 mr-2"></div>
+        <p className="text-sm">Disponible</p>
+      </div>
+      <div className="flex items-center">
+        <div className="w-7 h-7 rounded-full bg-red-500 mr-2"></div>
+        <p className="text-sm">No disponible</p>
+      </div>
+    </div>
+  </div>
+);
 
 const containerNodes = [
   {
@@ -81,12 +109,15 @@ const positions = [
   { x: 300, y: 700 },
 ];
 
-const ParkingSpacesGraph = ({ spaces }) => {
-  const initialNodes = spaces.map((space, index) => ({
-    id: space.numeroEspacio,
-    position: positions[index],
-    data: { label: space.numeroEspacio },
-  }));
+const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
+  const initialNodes = useMemo(() => {
+    return spaces.map((space, index) => ({
+      id: space.numeroEspacio,
+      position: positions[index],
+      data: { label: space.numeroEspacio },
+      estado: space.estado,
+    }));
+  }, [spaces]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState([
     ...initialNodes,
@@ -94,7 +125,6 @@ const ParkingSpacesGraph = ({ spaces }) => {
   ]);
   const [edges, onEdgesChange] = useEdgesState([]);
   const [spaceStates, setSpaceStates] = useState({});
-  const [lastActionTimes, setLastActionTimes] = useState({});
 
   useEffect(() => {
     const socket = io("http://localhost:4000");
@@ -103,21 +133,16 @@ const ParkingSpacesGraph = ({ spaces }) => {
       const lines = data.split("\n");
       setSpaceStates((prevSpaceStates) => {
         const newSpaceStates = { ...prevSpaceStates };
-        setLastActionTimes((prevLastActionTimes) => {
-          const newLastActionTimes = { ...prevLastActionTimes };
 
-          lines.forEach((line) => {
-            const [estado, valor] = line.split(":");
-            const spaceNumber = estado.replace("Estado", "");
+        lines.forEach((line) => {
+          const [estado, valor] = line.split(":");
+          const spaceNumber = estado.replace("Estado", "");
 
-            if (spaceNumber >= 1 && spaceNumber <= 6) {
-              newSpaceStates[spaceNumber] = valor;
-              newLastActionTimes[spaceNumber] = Date.now();
-            }
-          });
-
-          return newLastActionTimes;
+          if (spaceNumber >= 1 && spaceNumber <= 6) {
+            newSpaceStates[spaceNumber] = valor;
+          }
         });
+
         return newSpaceStates;
       });
     });
@@ -132,10 +157,48 @@ const ParkingSpacesGraph = ({ spaces }) => {
       nds.map((node) => {
         if (!node.id.startsWith("container")) {
           const isNarrowNode = ["1", "2", "5", "6"].includes(node.id);
+
+          if (node.id === "6") {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                label: (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                    className="h-full bg-blue-300 text-black w-full flex justify-center items-center"
+                  >
+                    <div>6</div>
+                    <div style={{ fontSize: "20px" }}>
+                      {specialSpaceState ? "Disponible" : "Reservado"}
+                    </div>
+                  </div>
+                ),
+              },
+              style: {
+                backgroundColor: specialSpaceState ? "green" : "red",
+                width: 150,
+                height: 170,
+                borderRadius: 10,
+                zIndex: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "30px",
+                fontWeight: "bold",
+                color: "white",
+              },
+            };
+          }
+
           return {
             ...node,
             style: {
-              backgroundColor: spaceStates[node.id] === "1" ? "green" : "red",
+              backgroundColor: spaceStates[node.id] === "1" ? "red" : "green",
               width: isNarrowNode ? 150 : 170,
               height: isNarrowNode ? 170 : 150,
               borderRadius: 10,
@@ -152,10 +215,10 @@ const ParkingSpacesGraph = ({ spaces }) => {
         return node;
       }),
     );
-  }, [spaceStates, setNodes]);
+  }, [spaceStates, specialSpaceState, setNodes]);
 
   return (
-    <div className="h-full">
+    <div className="h-full relative">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -178,6 +241,7 @@ const ParkingSpacesGraph = ({ spaces }) => {
           className="h-full w-full"
         />
       </ReactFlow>
+      <Legend />
     </div>
   );
 };

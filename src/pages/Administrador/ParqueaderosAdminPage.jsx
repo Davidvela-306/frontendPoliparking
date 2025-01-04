@@ -3,18 +3,21 @@ import { useForm } from "react-hook-form";
 import { ParkingSpacesGraph } from "@/components/common";
 import adminService from "@/services/adminService";
 import { useAuth } from "@context/AuthContext";
-
 import { Input, Label, Button, AlertText, Card } from "@components/ui";
 import parkingService from "@/services/parkingService";
 
 const ParqueaderosAdminPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [especialSpaceState, setEspecialSpaceState] = useState(false);
   const { token } = useAuth();
 
   useEffect(() => {
-    adminService.getParqueaderos({ token }).then((response) => {
+    parkingService.getParking().then((response) => {
       setParkingSpaces(response);
+      if (response && response.length > 0 && response[0].espacios) {
+        setEspecialSpaceState(response[0].espacios[5].estado);
+      }
     });
   }, [token]);
 
@@ -33,13 +36,10 @@ const ParqueaderosAdminPage = () => {
       espacios: "",
     },
   });
-  console.log("parkingSpaces", parkingSpaces);
 
   const onSubmit = (data) => {
-    console.log(data);
     const objToSend = {
       ...data,
-      //  TODO:  ELIMINAR ESTOS CAMPOS DESDE EL BACK Y FRONT:
       tipo: "Automóvil y motos",
       espacios: 9,
       estado: true,
@@ -49,9 +49,11 @@ const ParqueaderosAdminPage = () => {
       .then(() => {
         setSubmitted(true);
         reset();
-        // Actualiza la información del parqueadero en la pantalla
         adminService.getParqueaderos({ token }).then((response) => {
           setParkingSpaces(response);
+          if (response && response.length > 0 && response[0].espacios) {
+            setEspecialSpaceState(response[0].espacios[5].estado);
+          }
         });
         setTimeout(() => {
           setSubmitted(false);
@@ -70,6 +72,7 @@ const ParqueaderosAdminPage = () => {
     return <p>No hay parqueaderos cargados en el sistema</p>;
   }
 
+  parkingSpaces.map((parkingSpace) => console.log(parkingSpace.estado));
   return (
     <div className="p-4">
       <div className="mb-5 text-center flex flex-row gap-4 justify-between items-center">
@@ -87,20 +90,33 @@ const ParqueaderosAdminPage = () => {
 
       {parkingSpaces.map((parkingSpace) => (
         <div className="flex h-[70vh] gap-4" key={parkingSpace._id}>
-          {/* Gráfico del parqueadero */}
-          <div className="flex-1 border-solid border-2 border-azul-20 rounded-lg p-4">
-            <ParkingSpacesGraph spaces={parkingSpace.espacios} />
+          {/* Gráfico del parqueadero - ahora ocupa 3/4 del espacio */}
+          <div className="w-3/4 border-solid border-2 border-azul-20 rounded-lg p-4">
+            {parkingSpace.estado ?
+              <ParkingSpacesGraph
+                spaces={parkingSpace.espacios}
+                specialSpaceState={especialSpaceState}
+              />
+            : <div className="flex justify-center items-center h-full">
+                <div className="text-red-500 p-4 rounded-lg shadow-md flex flex-col justify-center items-center">
+                  <p className="text-2xl font-bold">PARQUEADERO RESERVADO</p>
+                  <p className="text-lg font-thin text-white-50">
+                    No disponible para estacionamiento
+                  </p>
+                </div>
+              </div>
+            }
           </div>
 
-          {/* Formulario de actualización */}
-          <div className="flex-1 rounded-lg p-8 border border-blue-200 bg-sky-200 shadow-sm flex justify-center items-center">
-            <Card className="bg-white w-full max-w-md">
+          {/* Formulario de actualización - ahora ocupa 1/4 del espacio */}
+          <div className="w-1/4 rounded-lg p-4 border border-blue-200 bg-sky-200 shadow-sm flex justify-center items-center">
+            <Card className="bg-white w-full">
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col gap-6 p-4"
+                className="flex flex-col gap-4 p-4"
               >
                 {/* Nombre */}
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label
                     text="Nombre del parqueadero"
                     className="text-gray-700 font-medium"
@@ -108,7 +124,7 @@ const ParqueaderosAdminPage = () => {
                   <Input
                     type="text"
                     placeholder="ESFOT"
-                    className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-3 py-1 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     {...register("nombre", {
                       required: "El nombre es obligatorio",
                     })}
@@ -117,7 +133,7 @@ const ParqueaderosAdminPage = () => {
                 </div>
 
                 {/* Descripción */}
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label
                     text="Descripción"
                     className="text-gray-700 font-medium"
@@ -125,7 +141,7 @@ const ParqueaderosAdminPage = () => {
                   <Input
                     type="text"
                     placeholder="Parqueadero de la ESFOT"
-                    className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-3 py-1 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     {...register("description", {
                       required: "La descripción es obligatoria",
                     })}
@@ -136,9 +152,9 @@ const ParqueaderosAdminPage = () => {
                 </div>
 
                 {/* Grid para Planta y Bloque */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2">
                   {/* Planta */}
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <Label
                       text="Planta"
                       className="text-gray-700 font-medium"
@@ -146,7 +162,7 @@ const ParqueaderosAdminPage = () => {
                     <Input
                       type="text"
                       placeholder="1"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-1 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                       {...register("planta", {
                         required: "La planta es obligatoria",
                       })}
@@ -157,7 +173,7 @@ const ParqueaderosAdminPage = () => {
                   </div>
 
                   {/* Bloque */}
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <Label
                       text="Bloque"
                       className="text-gray-700 font-medium"
@@ -165,7 +181,7 @@ const ParqueaderosAdminPage = () => {
                     <Input
                       type="text"
                       placeholder="A"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-3 py-1 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                       {...register("bloque", {
                         required: "El bloque es obligatorio",
                       })}
@@ -177,19 +193,16 @@ const ParqueaderosAdminPage = () => {
                 </div>
 
                 {/* Botón de envío */}
-                {
-                  //formulario enviado correctamente
-                  submitted && (
-                    <div className="flex justify-center">
-                      <p className="text-green-500 font-bold">
-                        Parqueadero actualizado correctamente
-                      </p>
-                    </div>
-                  )
-                }
+                {submitted && (
+                  <div className="flex justify-center">
+                    <p className="text-green-500 font-bold text-sm">
+                      Parqueadero actualizado correctamente
+                    </p>
+                  </div>
+                )}
                 <Button
                   type="submit"
-                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-md transition-colors"
+                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition-colors"
                 >
                   Actualizar Parqueadero
                 </Button>

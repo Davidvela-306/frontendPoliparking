@@ -2,15 +2,21 @@ import { useEffect, useState } from "react";
 import { ParkingSpacesGraph } from "@/components/common";
 import parkingService from "@/services/parkingService";
 import { useAuth } from "@context/AuthContext";
+
 const ParqueaderosUserPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
+  const [estadoParqueadero, setEstadoParqueadero] = useState(null);
+  const [especialSpaceState, setEspecialSpaceState] = useState(false);
+
   const { token } = useAuth();
+
   useEffect(() => {
     parkingService.getParking().then((response) => {
+      setEstadoParqueadero(response[0].estado);
       setParkingSpaces(response);
+      setEspecialSpaceState(response[0].espacios[5].estado);
     });
   }, [token]);
-  console.log(parkingSpaces);
 
   if (!parkingSpaces) {
     return <p>Cargando...</p>;
@@ -19,10 +25,6 @@ const ParqueaderosUserPage = () => {
   if (parkingSpaces.length === 0) {
     return <p>No hay parqueaderos cargados en el sistema</p>;
   }
-  console.log("parkingSpaces", parkingSpaces);
-  parkingSpaces.map((parkingSpace) => {
-    console.log("parkingSpace espacios", parkingSpace.espacios);
-  });
 
   return (
     <>
@@ -39,12 +41,22 @@ const ParqueaderosUserPage = () => {
 
         {parkingSpaces.map((parkingSpace) => (
           <div className="flex h-[70vh] gap-4" key={parkingSpace._id}>
-            {/* añadir borde */}
-            {parkingSpace.estado ?
-              <div className="flex-1 border-solid border-2 border-azul-20  rounded-lg p-4">
-                <ParkingSpacesGraph spaces={parkingSpace.espacios} />
-              </div>
-            : <p>El parqueadero se encuentra cerrado</p>}
+            <div className="flex-1 border-solid border-2 border-azul-20 rounded-lg p-4">
+              {estadoParqueadero ?
+                <ParkingSpacesGraph
+                  spaces={parkingSpace.espacios}
+                  specialSpaceState={especialSpaceState}
+                />
+              : <div className="flex justify-center items-center h-full">
+                  <div className="text-red-500 p-4 rounded-lg shadow-md flex flex-col justify-center items-center">
+                    <p className="text-2xl font-bold">PARQUEADERO RESERVADO</p>
+                    <p className="text-lg font-thin text-white-50">
+                      No disponible para estacionamiento
+                    </p>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         ))}
       </div>
