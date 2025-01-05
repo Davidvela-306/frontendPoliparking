@@ -125,12 +125,15 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
   ]);
   const [edges, onEdgesChange] = useEdgesState([]);
   const [spaceStates, setSpaceStates] = useState({});
+  const [lastSensorState, setLastSensorState] = useState(null);
+  const [autoReleasePending, setAutoReleasePending] = useState(false);
 
   useEffect(() => {
     const socket = io("http://localhost:4000");
 
     socket.on("serialData", (data) => {
       const lines = data.split("\n");
+
       setSpaceStates((prevSpaceStates) => {
         const newSpaceStates = { ...prevSpaceStates };
 
@@ -140,6 +143,17 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
 
           if (spaceNumber >= 1 && spaceNumber <= 6) {
             newSpaceStates[spaceNumber] = valor;
+
+            if (spaceNumber === "6") {
+              const isNowEmpty = valor === "0";
+              const wasOccupied = prevSpaceStates[spaceNumber] === "1";
+
+              if (wasOccupied && isNowEmpty && !specialSpaceState) {
+                setAutoReleasePending(true);
+              }
+
+              setLastSensorState(valor);
+            }
           }
         });
 
@@ -150,7 +164,17 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [specialSpaceState]);
+
+  useEffect(() => {
+    if (autoReleasePending && !specialSpaceState) {
+      const event = new CustomEvent("autoReleaseSpace6", {
+        detail: { released: true },
+      });
+      window.dispatchEvent(event);
+      setAutoReleasePending(false);
+    }
+  }, [autoReleasePending, specialSpaceState]);
 
   useEffect(() => {
     setNodes((nds) =>
@@ -159,6 +183,9 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
           const isNarrowNode = ["1", "2", "5", "6"].includes(node.id);
 
           if (node.id === "6") {
+            const sensorOccupied = spaceStates[6] === "1";
+            const isAvailable = specialSpaceState && !sensorOccupied;
+
             return {
               ...node,
               data: {
@@ -174,13 +201,13 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
                   >
                     <div>6</div>
                     <div style={{ fontSize: "20px" }}>
-                      {specialSpaceState ? "Disponible" : "Reservado"}
+                      {isAvailable ? "Disponible" : "Reservado"}
                     </div>
                   </div>
                 ),
               },
               style: {
-                backgroundColor: specialSpaceState ? "green" : "red",
+                backgroundColor: isAvailable ? "green" : "red",
                 width: 150,
                 height: 170,
                 borderRadius: 10,

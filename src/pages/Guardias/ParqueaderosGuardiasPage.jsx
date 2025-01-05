@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ParkingSpacesGraph } from "@/components/common";
 import parkingService from "@/services/parkingService";
 import { useAuth } from "@context/AuthContext";
@@ -19,15 +19,7 @@ const ParqueaderosGuardiasPage = () => {
     });
   }, [token]);
 
-  if (!parkingSpaces) {
-    return <p>Cargando...</p>;
-  }
-
-  if (parkingSpaces.length === 0) {
-    return <p>No hay parqueaderos cargados en el sistema</p>;
-  }
-
-  const handleSpecialSpaceChange = async () => {
+  const handleSpecialSpaceChange = useCallback(async () => {
     const espacioIndex = 5;
     const nuevoEstado = !especialSpaceState;
 
@@ -54,7 +46,29 @@ const ParqueaderosGuardiasPage = () => {
     } catch (error) {
       console.error("Error al cambiar el estado:", error);
     }
-  };
+  }, [especialSpaceState, parkingSpaces, token]);
+
+  useEffect(() => {
+    const handleAutoRelease = async (event) => {
+      if (event.detail.released && !especialSpaceState) {
+        await handleSpecialSpaceChange();
+      }
+    };
+
+    window.addEventListener("autoReleaseSpace6", handleAutoRelease);
+
+    return () => {
+      window.removeEventListener("autoReleaseSpace6", handleAutoRelease);
+    };
+  }, [especialSpaceState, handleSpecialSpaceChange]);
+
+  if (!parkingSpaces) {
+    return <p>Cargando...</p>;
+  }
+
+  if (parkingSpaces.length === 0) {
+    return <p>No hay parqueaderos cargados en el sistema</p>;
+  }
 
   return (
     <>
