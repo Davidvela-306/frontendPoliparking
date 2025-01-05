@@ -15,4 +15,8 @@ const baseUsuarios = axios.create({
   baseURL: `${URL}/usuarios`,
 });
 
-export { baseAdmin, baseGuardias, baseParqueaderos, baseUsuarios };
+const base = axios.create({
+  baseURL: `${URL}`,
+});
+
+export { base , baseAdmin, baseGuardias, baseParqueaderos, baseUsuarios };

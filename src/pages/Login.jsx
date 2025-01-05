@@ -12,6 +12,7 @@ import {
   AlertText,
 } from "@components/ui";
 import { EyeIcon, EyeSlashIcon } from "@components/ui/icons/index";
+import { Link } from "react-router-dom";
 
 const LOGIN_ROLES = [
   { value: "Usuario", label: "Usuario externo" },
@@ -102,7 +103,7 @@ const Login = () => {
           <Card>
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="flex flex-col w-full"
+              className="flex flex-col w-full mb-3"
             >
               {/* Rol Selection */}
               <div className="w-full flex justify-between mb-1">
@@ -184,6 +185,9 @@ const Login = () => {
                 Ingresar
               </Button>
             </form>
+            <Link to="/recuperar-contrasena" className="text-center text-azul-10 hover:underline">
+              ¿Olvidaste tu contraseña?
+            </Link>
           </Card>
         </div>
       </div>

@@ -10,7 +10,13 @@ import {
 } from "./layouts/SideBar";
 
 import { ProtectedRoute } from "@components/index";
-import { Login, Inicio, LandingPage } from "@pages/index";
+import {
+  Login,
+  Inicio,
+  LandingPage,
+  RecoverPassword,
+  ChangePassword,
+} from "@pages/index";
 import {
   GuardiasAdminPage,
   ParqueaderosAdminPage,
@@ -68,6 +74,22 @@ function App() {
             element={
               <DefaultLayout isAuth={isAuth} location={location}>
                 <LandingPage />
+              </DefaultLayout>
+            }
+          />
+          <Route
+            path="/recuperar-contrasena"
+            element={
+              <DefaultLayout isAuth={isAuth} location={location}>
+                <RecoverPassword />
+              </DefaultLayout>
+            }
+          />
+          <Route
+            path="/cambiar-contrasena"
+            element={
+              <DefaultLayout isAuth={isAuth} location={location}>
+                <ChangePassword />
               </DefaultLayout>
             }
           />

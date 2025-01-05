@@ -32,35 +32,39 @@ const ParqueaderosAdminPage = () => {
       description: "",
       planta: "",
       bloque: "",
-      tipo: "",
-      espacios: "",
     },
   });
 
   const onSubmit = (data) => {
-    const objToSend = {
-      ...data,
-      tipo: "Automóvil y motos",
-      espacios: 9,
-      estado: true,
-    };
+    console.log("Data:", data);
+
     parkingService
-      .updateParking(token, parkingSpaces[0]._id, objToSend)
+      .updateParking(token, parkingSpaces[0]._id, data)
       .then(() => {
+        // Actualizar el estado local inmediatamente
+        setParkingSpaces((prevSpaces) =>
+          prevSpaces.map((space) =>
+            space._id === parkingSpaces[0]._id ? { ...space, ...data } : space,
+          ),
+        );
+
         setSubmitted(true);
         reset();
+
+        // Actualizar los datos desde el servidor como respaldo
         adminService.getParqueaderos({ token }).then((response) => {
           setParkingSpaces(response);
           if (response && response.length > 0 && response[0].espacios) {
             setEspecialSpaceState(response[0].espacios[5].estado);
           }
         });
+
         setTimeout(() => {
           setSubmitted(false);
         }, 3000);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error:", error);
       });
   };
 
@@ -72,7 +76,6 @@ const ParqueaderosAdminPage = () => {
     return <p>No hay parqueaderos cargados en el sistema</p>;
   }
 
-  parkingSpaces.map((parkingSpace) => console.log(parkingSpace.estado));
   return (
     <div className="p-4">
       <div className="mb-5 text-center flex flex-row gap-4 justify-between items-center">

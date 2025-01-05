@@ -1,4 +1,4 @@
-import { baseParqueaderos } from "@/helpers/instances_routes";
+import { base, baseParqueaderos } from "@/helpers/instances_routes";
 import { fetchPut, fetchGet } from "@/helpers/request_functions";
 const parkingService = {
   async getParking(token) {
@@ -20,7 +20,7 @@ const parkingService = {
   async updateParking(token, parkingId, data) {
     try {
       const response = await fetchPut(
-        baseParqueaderos,
+        base,
         `/actualizar-parqueadero/${parkingId}`,
         data,
         token,

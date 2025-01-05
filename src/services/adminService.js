@@ -25,12 +25,12 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async deleteExternalUser(token, userId) {
-    console.log("deleteGuardia llamada con parámetros:", token, userId);
+    console.log("eliminar usuario externo, llamada con parámetros:", token, userId);
 
     try {
       const response = await fetchDelete(
         baseAdmin,
-        `/eliminar_usuario/${userId}`,
+        `/eliminar-usuario/${userId}`,
         token,
       );
       return response.data;
@@ -140,23 +140,7 @@ const adminService = {
     } catch (error) {
       console.error("Error:", error);
     }
-  },
-  /* 
-  GET http://localhost:3000/api/administrador/disponibilidad-parqueadero
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NTkwOTExYjFhNzUwM2I4MzIxNDQzZCIsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3MzQxMjA0OTQsImV4cCI6MTczNDIwNjg5NH0.mFwDwp-z6Pt6qyTwCMmt5P1msOFO0TMlV3xXJubnSYQ */
-  async getParqueaderos({ token }) {
-    try {
-      const response = await fetchGet(
-        baseAdmin,
-        "/disponibilidad-parqueadero",
-        token,
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
-    }
-  },
+  }
 };
 
 export default adminService;
