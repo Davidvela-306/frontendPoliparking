@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Card, Input, Button, Label, AlertText } from "@components/ui/index";
+const URL = import.meta.env.VITE_BACKEND_URL;
+
 
 const RecoverPassword = () => {
   const {
@@ -13,9 +15,9 @@ const RecoverPassword = () => {
   });
 
 const endpoints = [
-  "http://localhost:4000/api/recuperar-clave",
-  "http://localhost:4000/api/guardias/recuperar-clave",
-  "http://localhost:4000/api/administrador/recuperar-clave",
+  `${URL}/recuperar-clave`,
+  `${URL}/guardias/recuperar-clave`,
+  `${URL}/administrador/recuperar-clave`,
 ];
 
 const onSubmit = async (data) => {
@@ -30,6 +32,7 @@ const onSubmit = async (data) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
+        mode: "cors",
       });
 
       if (response.ok) {

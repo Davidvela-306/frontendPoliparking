@@ -10,7 +10,7 @@ const Espacios = ({ onAllOccupied }) => {
   const [estado6, setEstado6] = useState(null);
 
   useEffect(() => {
-    const socket = io("http://localhost:3000");
+    const socket = io("http://localhost:4000");
 
     socket.on("serialData", (data) => {
       const lines = data.split("\n");
