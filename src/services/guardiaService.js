@@ -14,6 +14,15 @@ const guardiaService = {
       console.error(error);
     }
   },
+  async getExternalUsers({ token }) {
+    try {
+      const response = await fetchGet(baseGuardias, "/listar-usuarios", token);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      throw error;
+    }
+  },
   async createExternalUser({ token, user }) {
     try {
       const response = await fetchPost(baseGuardias, "/registrar", user, token);
@@ -62,11 +71,29 @@ const guardiaService = {
   },
   async recoverPassword(data, token) {
     try {
-      const response=await fetchPut(baseGuardias, `/nueva-clave/${token}`, data);
+      const response = await fetchPut(
+        baseGuardias,
+        `/nueva-clave/${token}`,
+        data,
+      );
       return response.data;
     } catch (error) {
       console.error("Error:", error);
     }
   },
+  async enableUsers(token) {
+    try {
+      const response = await fetchPatch(
+        baseGuardias,
+        "cambiar-estado-usuario",
+        {},
+        token,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  },
+ 
 };
 export default guardiaService;

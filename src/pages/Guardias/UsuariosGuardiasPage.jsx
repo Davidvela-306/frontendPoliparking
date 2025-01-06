@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { useAuth } from "@context/AuthContext";
-import adminService from "@/services/adminService";
 import { Pagination, DataTable } from "@/components/common/index";
 import RegisterGuardiaUser from "@/components/RegisterGuardiaUser";
+import guardiaService from "@/services/guardiaService";
 
 /**
  * This component renders a page for managing external users.
@@ -12,19 +12,21 @@ import RegisterGuardiaUser from "@/components/RegisterGuardiaUser";
 const UsuariosAdminPage = () => {
   const [filterUsers, setFilterUsers] = useState([]);
   const [render, setRender] = useState(false);
+  const [hablitados, setHabilitados] = useState(true);
 
   const { token } = useAuth();
 
   const fetchUsers = async (token) => {
-    const response = await adminService.getExternalUsers(token);
+    const response = await guardiaService.getExternalUsers(token);
     return response;
   };
 
   useEffect(() => {
     fetchUsers({ token }).then((fetchedUsers) => {
       setFilterUsers(fetchedUsers);
+      setHabilitados(fetchedUsers[0].estado);
     });
-  }, [token, render]);
+  }, [token, render, hablitados]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("");
@@ -39,6 +41,7 @@ const UsuariosAdminPage = () => {
     { key: "placa_vehiculo", label: "Placa del Vehiculo" },
     { key: "telefono", label: "Telefono" },
     { key: "rol", label: "Rol" },
+    { key: "estado", label: "Estado" },
   ];
 
   // Filtering Logic
@@ -105,37 +108,66 @@ const UsuariosAdminPage = () => {
           </div>
 
           {/* Filter buttons */}
-          <div className="mb-4">
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => {
-                setCurrentPage(1);
-                setFilterRole("");
-              }}
-            >
-              Todos
-            </button>
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => handleFilterByRole("Administrativo")}
-            >
-              administrativo
-            </button>
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => handleFilterByRole("Estudiante")}
-            >
-              estudiante
-            </button>
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => handleFilterByRole("docente")}
-            >
-              docente
-            </button>
+          <div className="flex flex-row justify-between">
+            <div className="mb-4">
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => {
+                  setCurrentPage(1);
+                  setFilterRole("");
+                }}
+              >
+                Todos
+              </button>
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => handleFilterByRole("Administrativo")}
+              >
+                administrativo
+              </button>
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => handleFilterByRole("Estudiante")}
+              >
+                estudiante
+              </button>
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => handleFilterByRole("docente")}
+              >
+                docente
+              </button>
+            </div>
+            <div>
+              <button
+                className="px-4 py-2 bg-azul-10 text-white border-solid border-2 border-amarillo-10 focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={async () => {
+                  try {
+                    setHabilitados(!hablitados);
+                    const response = await guardiaService.enableUsers(token);
+                    console.log(response);
+                  } catch (error) {
+                    console.error("Error:", error);
+                  }
+                }}
+              >
+                {
+                  hablitados ? "Restringir acceso" : "Habilitar acceso"
+                }
+              </button>
+            </div>
           </div>
 
           {/* DataTable */}
+          {hablitados ?
+            <p className="text-green-500">
+              Los usuarios se encuntran habilitados para ingresar al sistema
+            </p>
+          : <p className="text-red-500">
+              Los usuarios no se encuntran habilitados para ingresar al sistema
+            </p>
+          }
+          <br />
           <DataTable columns={columns} data={paginatedUsers} />
 
           {/* Pagination */}
@@ -146,7 +178,9 @@ const UsuariosAdminPage = () => {
           />
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
-          <p className="text-2xl text-azul-10 font-bold">Registrar usario externo</p>
+          <p className="text-2xl text-azul-10 font-bold">
+            Registrar usario externo
+          </p>
           <RegisterGuardiaUser setRender={setRender} render={render} />
         </div>
       </div>
