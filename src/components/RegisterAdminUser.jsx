@@ -34,10 +34,8 @@ const RegisterAdminUser = ({ setRender, render }) => {
   const onSubmit = async (values) => {
     try {
       const user = { ...values, estado: true };
-      console.log("Sending user data:", user);
       const response = await adminService.createExternalUser({ token, user });
 
-      console.log("Received response:", response);
 
       if (response) {
         setRender(!render);

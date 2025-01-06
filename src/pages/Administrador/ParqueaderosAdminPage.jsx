@@ -36,7 +36,6 @@ const ParqueaderosAdminPage = () => {
   });
 
   const onSubmit = (data) => {
-    console.log("Data:", data);
 
     parkingService
       .updateParking(token, parkingSpaces[0]._id, data)
@@ -64,7 +63,7 @@ const ParqueaderosAdminPage = () => {
         }, 3000);
       })
       .catch((error) => {
-        console.log("Error:", error);
+        console.error("Error:", error);
       });
   };
 

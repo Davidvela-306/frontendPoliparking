@@ -12,7 +12,6 @@ const ParqueaderosGuardiasPage = () => {
 
   useEffect(() => {
     parkingService.getParking().then((response) => {
-      console.log("response", response);
       setEstadoParqueadero(response[0].estado);
       setParkingSpaces(response);
       setEspecialSpaceState(response[0].espacios[5].estado);

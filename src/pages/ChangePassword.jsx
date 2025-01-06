@@ -2,6 +2,15 @@ import { useForm } from "react-hook-form";
 import { Card, Input, Button, Label, AlertText } from "@components/ui/index";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import adminService from "@/services/adminService";
+import guardiaService from "@/services/guardiaService";
+import userService from "@/services/userService";
+
+const LOGIN_ROLES = [
+  { value: "Usuario", label: "Usuario externo" },
+  { value: "Administrador", label: "Administrador" },
+  { value: "Guardia", label: "Guardia" },
+];
 
 const ChangePassword = () => {
   const {
@@ -11,6 +20,7 @@ const ChangePassword = () => {
     watch,
   } = useForm({
     defaultValues: {
+      rol: "", // Añadir el rol en los valores predeterminados
       password: "",
       confirmarPassword: "",
     },
@@ -19,103 +29,87 @@ const ChangePassword = () => {
   const [recoveryToken, setRecoveryToken] = useState(null);
   const location = useLocation();
 
-//   // Endpoints para los tres tipos de usuarios
-//   const endpoints = [
-//     "http://localhost:4000/api/administrador/recuperar-clave", // Administrador
-//     "http://localhost:4000/api/guardias/recuperar-clave", // Guardia
-//     "http://localhost:4000/api/recuperar-clave", // Usuario externo
-//   ];
-
-//   const endpointsNuevaClave = [
-//     "http://localhost:4000/api/administrador/nueva-clave", // Administrador
-//     "http://localhost:4000/api/guardias/nueva-clave", // Guardia
-//     "http://localhost:4000/api/nueva-clave", // Usuario externo
-//   ];
-
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const tokenFromUrl = queryParams.get("token");
-    console.log("Token from URL:", tokenFromUrl); // Para depuración
 
     if (tokenFromUrl) {
       setRecoveryToken(tokenFromUrl);
     }
   }, [location]);
 
- const onSubmit = async (data) => {
-   if (!recoveryToken) {
-     alert("El token de recuperación es inválido o no está disponible.");
-     window.location.href = "/recuperar-contrasena";
-     return;
-   }
-     console.log("recoveyToken", recoveryToken);
-     console.log("Data Contraseña", data);
-     
+  const onSubmit = async (data) => {
+    if (!recoveryToken) {
+      alert("El token de recuperación es inválido o no está disponible.");
+      window.location.href = "/recuperar-contrasena";
+      return;
+    }
 
-//    let tokenValid = false;
+    const { rol } = data;
 
-//    // Iterar a través de los tres endpoints para validar el token
-//    for (const endpoint of endpoints) {
-//      try {
-//        const response = await fetch(`${endpoint}/${recoveryToken}`, {
-//          method: "GET",
-//          headers: { "Content-Type": "application/json" },
-//        });
+    if (rol === "Guardia") {
+      guardiaService
+        .confirmChangePassword(recoveryToken)
+        .then(() => {
+          return guardiaService.recoverPassword(data, recoveryToken);
+        })
+        .then(() => {
+          alert(
+            "Contraseña cambiada exitosamente. Inicia sesión con tu nueva contraseña.",
+          );
+          window.location.href = "/singin";
+        })
+        .catch((error) => {
+          if (error instanceof Error) {
+            console.error("Error al cambiar la contraseña:", error);
+          } else {
+            console.error("Error al confirmar el token:", error);
+          }
+        });
+    }
 
-//        if (response.ok) {
-//          tokenValid = true;
-//          break; // Si el token es válido en cualquiera de los endpoints, salimos del bucle
-//        } else {
-//          console.error(
-//            `Error de validación en ${endpoint}:`,
-//            await response.text(),
-//          );
-//        }
-//      } catch (error) {
-//        console.error(`Error al validar token con ${endpoint}:`, error);
-//      }
-//    }
+    if (rol === "Administrador") {
+      adminService
+        .confirmChangePassword(recoveryToken)
+        .then(() => {
+          return adminService.recoverPassword(data, recoveryToken);
+        })
+        .then(() => {
+          alert(
+            "Contraseña cambiada exitosamente. Inicia sesión con tu nueva contraseña.",
+          );
+          window.location.href = "/singin";
+        })
+        .catch((error) => {
+          if (error instanceof Error) {
+            console.error("Error al cambiar la contraseña:", error);
+          } else {
+            console.error("Error al confirmar el token:", error);
+          }
+        });
+    }
 
-//    if (!tokenValid) {
-//      alert("El token de recuperación es inválido o ha expirado.");
-//      return;
-//    }
-
-//    const { password, confirmarPassword } = data;
-
-//    // Iterar a través de los tres endpoints para cambiar la contraseña
-//    for (const endpoint of endpointsNuevaClave) {
-//      try {
-//        const response = await fetch(`${endpoint}/${recoveryToken}`, {
-//          method: "PUT",
-//          headers: { "Content-Type": "application/json" },
-//          body: JSON.stringify({ password, confirmarPassword }),
-//        });
-
-//        const responseData = await response.json();
-//        if (response.ok) {
-//          alert(
-//            "Contraseña cambiada exitosamente. Ahora puedes iniciar sesión.",
-//          );
-//          window.location.href = "/signin";
-//          return;
-//        } else {
-//          console.error(
-//            `Error al cambiar la contraseña en ${endpoint}:`,
-//            responseData,
-//          );
-//          alert(
-//            responseData.message ||
-//              "Ocurrió un error al cambiar la contraseña. Inténtalo nuevamente.",
-//          );
-//        }
-//      } catch (error) {
-//        console.error(`Error al cambiar la contraseña con ${endpoint}:`, error);
-//        alert("Error de red. Por favor, inténtalo más tarde.");
-//      }
-//    }
- };
-
+    if (rol === "Usuario") {
+      userService
+        .confirmChangePassword(recoveryToken)
+        .then(() => {
+          return userService.recoverPassword(data, recoveryToken);
+        })
+        .then(() => {
+          alert(
+            "Contraseña cambiada exitosamente. Inicia sesión con tu nueva contraseña.",
+          );
+          window.location.href = "/singin";
+        })
+        .catch((error) => {
+          if (error instanceof Error) {
+            console.error("Error al cambiar la contraseña:", error);
+          } else {
+            console.error("Error al confirmar el token:", error);
+          }
+        });
+    }
+  };
 
   const watchPassword = watch("password", "");
 
@@ -133,6 +127,28 @@ const ChangePassword = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col w-full"
         >
+          {/* Rol Selection */}
+          <div className="w-full flex justify-between mt-4 mb-1">
+            <Label text="Rol" />
+            {errors.rol && <AlertText text="Rol es obligatorio" />}
+          </div>
+          <select
+            className={`w-full p-2 rounded-md border ${
+              watch("rol") ? "text-black" : "text-slate-400"
+            }`}
+            {...register("rol", { required: true })}
+          >
+            <option value="" disabled hidden>
+              Seleccione un rol
+            </option>
+            {LOGIN_ROLES.map((role) => (
+              <option key={role.value} value={role.value}>
+                {role.label}
+              </option>
+            ))}
+          </select>
+
+          {/* Nueva Contraseña */}
           <div className="w-full flex justify-between items-center mt-4 mb-2">
             <Label text="Nueva Contraseña" className="text-gray-700" />
             {errors.password && (
@@ -155,6 +171,7 @@ const ChangePassword = () => {
             })}
           />
 
+          {/* Confirmar Contraseña */}
           <div className="w-full flex justify-between items-center mt-4 mb-2">
             <Label text="Confirmar Contraseña" className="text-gray-700" />
             {errors.confirmarPassword && (
@@ -175,6 +192,7 @@ const ChangePassword = () => {
             })}
           />
 
+          {/* Submit Button */}
           <Button
             type="submit"
             className="mt-6 py-2 px-4 bg-blue-500 text-white font-semibold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"

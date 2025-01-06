@@ -1,7 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 const Inicio = () => {
   const { user } = useAuth();
-  console.log("user", user);
   return (
     <>
       <div className="relative w-full flex justify-center items-center h-[80vh]  bg-opacity-50">

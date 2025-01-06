@@ -34,7 +34,8 @@ const onSubmit = async (data) => {
 
       if (response.ok) {
         alert("Correo de recuperación enviado exitosamente.");
-        success = true;
+        success=true;
+        
         break;
       }
     } catch (error) {

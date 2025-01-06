@@ -34,11 +34,9 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
   const onSubmit = async (values) => {
     try {
       const user = { ...values, estado: true };
-      console.log("Sending user data:", user);
       guardiaService
         .createExternalUser({ token, user })
-        .then((res) => {
-          console.log("Received response:", res);
+        .then(() => {
           setRender(!render);
           alert("Usuario creado correctamente");
         })
@@ -46,7 +44,7 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
           alert(
             "Error al crear el usuario: no se recibió una respuesta válida",
           );
-          console.log("Error:", error);
+          console.error("Error:", error);
         });
     } catch (error) {
       console.error("Full error details:", error);

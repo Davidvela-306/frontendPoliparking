@@ -1,4 +1,4 @@
-import { fetchDelete, fetchPatch } from "@/helpers/request_functions";
+import { fetchDelete, fetchPatch, fetchPut } from "@/helpers/request_functions";
 import { baseAdmin, baseGuardias } from "@/helpers/instances_routes";
 import { fetchGet, fetchPost } from "@/helpers/request_functions";
 const adminService = {
@@ -25,7 +25,6 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async deleteExternalUser(token, userId) {
-    console.log("eliminar usuario externo, llamada con parámetros:", token, userId);
 
     try {
       const response = await fetchDelete(
@@ -99,7 +98,6 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async deleteGuardia(token, userId) {
-    console.log("deleteGuardia llamada con parámetros:", token, userId);
 
     try {
       const response = await fetchDelete(
@@ -123,12 +121,6 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async changeGuardiaState(token, userId, state) {
-    console.log(
-      "changeGuardiaState llamada con parámetros:",
-      token,
-      userId,
-      state,
-    );
     try {
       const response = await fetchPatch(
         baseAdmin,
@@ -140,7 +132,30 @@ const adminService = {
     } catch (error) {
       console.error("Error:", error);
     }
-  }
+  },
+  async confirmChangePassword(token) {
+    try {
+      const response = await fetchGet(baseAdmin, `recuperar-clave/${token}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error en la confirmación del token:", error);
+      throw new Error("El token no es válido.");
+    }
+  },
+  async recoverPassword(data, token) {
+
+    try {
+      const response = await fetchPut(
+        baseAdmin,
+        `/nueva-clave/${token}`,
+        data,
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  },
 };
 
 export default adminService;

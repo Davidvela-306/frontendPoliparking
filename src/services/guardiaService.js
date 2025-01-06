@@ -1,5 +1,10 @@
 import { baseGuardias } from "@/helpers/instances_routes";
-import { fetchGet, fetchPatch, fetchPost } from "@/helpers/request_functions";
+import {
+  fetchGet,
+  fetchPatch,
+  fetchPost,
+  fetchPut,
+} from "@/helpers/request_functions";
 const guardiaService = {
   async getUser({ token }) {
     try {
@@ -39,6 +44,25 @@ const guardiaService = {
         data,
         token,
       );
+      return response.data;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  },
+
+  async confirmChangePassword(token) {
+    try {
+      const response = await fetchGet(baseGuardias, `recuperar-clave/${token}`);
+
+      return response.data;
+    } catch (error) {
+      console.error("Error en la confirmación del token:", error);
+      throw new Error("El token no es válido.");
+    }
+  },
+  async recoverPassword(data, token) {
+    try {
+      const response=await fetchPut(baseGuardias, `/nueva-clave/${token}`, data);
       return response.data;
     } catch (error) {
       console.error("Error:", error);

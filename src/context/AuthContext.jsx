@@ -107,12 +107,6 @@ export function AuthProvider({ children }) {
     loadUserFromLocalStorage();
   }, []);
 
-  console.log(
-    "\x1b[31m%s\x1b[0m",
-    "srccontextAuthContext.jsx:112 token",
-    token,
-  );
-  console.log("%csrccontextAuthContext.jsx:113 user:", "color: #26bfa5;", user);
   return (
     <AuthContext.Provider
       value={{

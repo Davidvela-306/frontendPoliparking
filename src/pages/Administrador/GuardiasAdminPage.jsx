@@ -80,8 +80,6 @@ const GuardiasAdminPage = () => {
 
   const handleDeleteGuardia = (id, email) => {
     if (window.confirm(`Deseas eliminar al usuario ${email}?`)) {
-      console.log("handleDeleteGuardia \n");
-      console.log(id, email);
 
       setFilterGuardias(filterGuardias.filter((user) => user._id !== id));
       adminService
@@ -95,8 +93,6 @@ const GuardiasAdminPage = () => {
     }
   };
   const handleChangeState = (id, email, state) => {
-    console.log("handleChangeState \n");
-    console.log(id, email, state);
 
     if (window.confirm(`Deseas cambiar el estado del guardia ${email}?`)) {
       adminService
