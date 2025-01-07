@@ -52,7 +52,7 @@ const FormularioU = ({ onUpdateSuccess }) => {
           placeholder="0999999999"
           {...register("telefono", { required: true })}
         />
-        <Button type="submit">Actualizar Teléfono</Button>
+        <Button type="submit">Actualizar teléfono</Button>
       </form>
     </div>
   );

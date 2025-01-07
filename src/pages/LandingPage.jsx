@@ -5,10 +5,10 @@ import {
   Footer,
 } from "@components/landing/index";
 const footerLinks = [
-  { text: "Términos y condiciones", href: "/" },
-  { text: "Política de privacidad", href: "/" },
-  { text: "Ayuda", href: "/" },
-  { text: "Contáctanos", href: "/" },
+  { text: "", href: "/" },
+  { text: "", href: "/" },
+  { text: "", href: "/" },
+  { text: "", href: "/" },
 ];
 
 /**
@@ -28,7 +28,7 @@ const LandingPage = () => {
         <Services />
         <SafetyBanner
           badge=""
-          title="Estacionarce ya no será un problema"
+          title="Estacionarse ya no será un problema"
           description="Rápido, seguro y eficiente"
           srcImage={"https://i.ytimg.com/vi/dQjntXvMVTE/maxresdefault.jpg"}
           altImage="Car"

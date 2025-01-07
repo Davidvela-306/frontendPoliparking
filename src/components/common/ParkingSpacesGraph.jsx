@@ -15,16 +15,9 @@ const Legend = () => (
     <div className="space-y-2">
       <div className="flex items-center">
         <div className="w-7 h-7 rounded-full bg-blue-300 mr-2"></div>
-        <p className="text-sm">Persona con capacidad diferente</p>
+        <p className="text-sm">Discapacidad</p>
       </div>
-      <div className="flex items-center">
-        <div className="w-7 h-7 rounded-full bg-blue-300 border-4 border-solid border-green-600 mr-2"></div>
-        <p className="text-sm">Disponible</p>
-      </div>
-      <div className="flex items-center">
-        <div className="w-7 h-7 rounded-full bg-blue-300 border-4 border-solid border-red-500 mr-2"></div>
-        <p className="text-sm">No disponible o reservado</p>
-      </div>
+
       <div className="flex items-center">
         <div className="w-7 h-7 rounded-full bg-green-500 mr-2"></div>
         <p className="text-sm">Disponible</p>
@@ -61,7 +54,7 @@ const containerNodes = [
   {
     id: "container-2",
     position: { x: 600, y: 275 },
-    data: { label: "Marcelo Dávila 2" },
+    data: { label: "Calle Andalucía" },
     style: {
       backgroundColor: "#e0f7fa",
       width: 300,
@@ -81,7 +74,7 @@ const containerNodes = [
   {
     id: "container-3",
     position: { x: 75, y: 630 },
-    data: { label: "Esfot Posterior" },
+    data: { label: "Oficina guardias y limpieza" },
     style: {
       backgroundColor: "#ffecb3",
       width: 400,

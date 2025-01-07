@@ -79,7 +79,7 @@ const ParqueaderosGuardiasPage = () => {
             </h1>
             <p className="text-1xl text-azul-10">
               {parkingSpaces && parkingSpaces.length > 0 ?
-                `Este módulo te permite visualizar la disponibilidad de las plazas de estacionamiento y reservar el parqueadero ${parkingSpaces[0].nombre}.`
+                `Este módulo te permite visualizar y gestionar el parqueadero de la ${parkingSpaces[0].nombre}.`
               : "No hay parqueaderos cargados en el sistema"}
             </p>
           </div>

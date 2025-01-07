@@ -67,7 +67,7 @@ const ActualizarContraseña = () => {
           {...register("nuevoPassword", { required: true })}
         />
 
-        <Button type="submit">Actualizar Contraseña</Button>
+        <Button type="submit">Actualizar contraseña</Button>
       </form>
     </div>
   );

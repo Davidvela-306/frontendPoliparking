@@ -20,7 +20,7 @@ const Header = () => {
           onClick={signout}
           className="bg-amarillo-10 text-white p-2 rounded-lg w-full"
         >
-          Cerrar sesion
+          Cerrar sesión
         </button>
       </div>
     </>

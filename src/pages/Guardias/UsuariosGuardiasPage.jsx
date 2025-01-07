@@ -38,8 +38,8 @@ const UsuariosAdminPage = () => {
     { key: "nombre", label: "Nombre" },
     { key: "apellido", label: "Apellido" },
     { key: "email", label: "Email" },
-    { key: "placa_vehiculo", label: "Placa del Vehiculo" },
-    { key: "telefono", label: "Telefono" },
+    { key: "placa_vehiculo", label: "Placa del vehículo" },
+    { key: "telefono", label: "Teléfono" },
     { key: "rol", label: "Rol" },
     { key: "estado", label: "Estado" },
   ];
@@ -179,7 +179,7 @@ const UsuariosAdminPage = () => {
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
           <p className="text-2xl text-azul-10 font-bold">
-            Registrar usario externo
+            Registrar
           </p>
           <RegisterGuardiaUser setRender={setRender} render={render} />
         </div>
