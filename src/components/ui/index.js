@@ -10,3 +10,4 @@ export { default as CustomLink } from "./CustomLink";
 export { default as Espacios } from "./Espacios";
 export { default as InfoTarget } from "./InfoTarget";
 export { default as Select } from './Select';
+export { default as Modal } from './Modal';

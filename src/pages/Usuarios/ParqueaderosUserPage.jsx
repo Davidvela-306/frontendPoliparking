@@ -47,13 +47,22 @@ const ParqueaderosUserPage = () => {
                   spaces={parkingSpace.espacios}
                   specialSpaceState={especialSpaceState}
                 />
-              : <div className="flex justify-center items-center h-full">
-                  <div className="text-red-500 p-4 rounded-lg shadow-md flex flex-col justify-center items-center">
-                    <p className="text-2xl font-bold">PARQUEADERO RESERVADO</p>
-                    <p className="text-lg font-thin text-white-50">
-                      No disponible para estacionamiento
+              : <div className="flex justify-center items-center h-full flex-col">
+                  <div className="bg-red-500 p-4 rounded-lg shadow-md flex flex-col justify-center items-center">
+                    <p className="text-3xl font-bold text-white">
+                      PARQUEADERO RESERVADO
+                    </p>
+                    <p className="text-lg font-thin text-white-50 mt-2">
+                      Este estacionamiento ha sido reservado
                     </p>
                   </div>
+                  <p className="text-lg font-thin text-orange-500 mt-6">
+                    Si desea más información de este suceso o desea reservar,
+                    por favor comuníquese al siguiente número:
+                    <span className="text-lg font-bold text-orange-500">
+                      +34 123 456 789
+                    </span>
+                  </p>
                 </div>
               }
             </div>

@@ -94,6 +94,18 @@ const guardiaService = {
       console.error("Error:", error);
     }
   },
- 
+  async updateExternalUser(id, token, data) {
+    try {
+      const response = await fetchPut(
+        baseGuardias,
+        `/actualizar-usuarios/${id}`,
+        data,
+        token,
+      );
+      return response.data;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
 };
 export default guardiaService;

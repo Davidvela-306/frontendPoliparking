@@ -1,4 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 import {
   ReactFlow,
   Controls,
@@ -9,7 +11,7 @@ import {
 import io from "socket.io-client";
 import "@xyflow/react/dist/style.css";
 
-const Legend = () => (
+const ParkingSpaceLegend = () => (
   <div className="absolute bottom-4 right-4 bg-purple-200 p-4 rounded-lg shadow-lg z-50">
     <h3 className="text-lg font-bold mb-2">Leyenda</h3>
     <div className="space-y-2">
@@ -26,6 +28,19 @@ const Legend = () => (
         <div className="w-7 h-7 rounded-full bg-red-500 mr-2"></div>
         <p className="text-sm">No disponible</p>
       </div>
+    </div>
+  </div>
+);
+const InfoLeyend = () => (
+  <div className="absolute top-4 right-4 bg-green-200 p-4 rounded-lg shadow-lg z-50 max-w-xs">
+    <div className="flex items-center flex-row justify-center mb-2 space-x-2">
+      <Info size={70} />
+      <h3 className="text-base ">
+        Si desea reservar la plaza{" "}
+        <span className="font-bold">para persona con discapaciodad</span> del
+        estacionamiento puede comunicarce al siguiente número:{" "}
+        <span className="font-bold text-orange-500">+34 123 456 789</span>
+      </h3>
     </div>
   </div>
 );
@@ -103,6 +118,7 @@ const positions = [
 ];
 
 const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
+  const { rol } = useAuth();
   const initialNodes = useMemo(() => {
     return spaces.map((space, index) => ({
       id: space.numeroEspacio,
@@ -252,8 +268,13 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
           duration: 1000,
           animate: true,
         }}
+        nodesDraggable={false}
+        panOnDrag
+        zoomOnScroll
+        zoomOnPinch
       >
-        <Controls className="absolute top-4 left-4" />
+        <Controls  />
+        {/* Opcional: Ocultar controles */}
         <Background
           variant="dots"
           gap={12}
@@ -261,7 +282,9 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
           className="h-full w-full"
         />
       </ReactFlow>
-      <Legend />
+
+      <ParkingSpaceLegend />
+      {rol === "Usuario" && <InfoLeyend />}
     </div>
   );
 };

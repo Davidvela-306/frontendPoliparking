@@ -75,6 +75,7 @@ const DataTable = ({ columns, data, actions }) => {
                     onClick={() => action.onClick(item)}
                   >
                     {action.label}
+                    {action.icon}
                   </button>
                 ))}
               </td>

@@ -1,8 +1,11 @@
 import { useState, useMemo, useEffect } from "react";
 import { useAuth } from "@context/AuthContext";
 import { Pagination, DataTable } from "@/components/common/index";
-import RegisterGuardiaUser from "@/components/RegisterGuardiaUser";
 import guardiaService from "@/services/guardiaService";
+import { Edit } from "lucide-react";
+import { Modal } from "@/components/ui";
+import ActualizarUsuarioExterno from "@/components/ActualizarUsuarioExterno";
+import RegisterGuardiaUser from "@/components/RegisterGuardiaUser";
 
 /**
  * This component renders a page for managing external users.
@@ -32,6 +35,10 @@ const UsuariosAdminPage = () => {
   const [filterRole, setFilterRole] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
+  /* Modal states */
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const itemsPerPage = 6;
 
   const columns = [
@@ -43,6 +50,33 @@ const UsuariosAdminPage = () => {
     { key: "rol", label: "Rol" },
     { key: "estado", label: "Estado" },
   ];
+  const actions = [
+    {
+      label: (
+        <>
+          <p className=" w-full flex justify-center text-azul-20">Editar </p>
+          <div className="w-full flex justify-center ml-2">
+            <Edit size={20} color="skyblue" />
+          </div>
+        </>
+      ),
+      style:
+        "bg-transparent rounded-full align-middle flex flex-row items-center justify-center w-full",
+      onClick: (item) =>
+        handleEditUser(
+          item._id,
+          item.email,
+          item.nombre,
+          item.apellido,
+          item.rol,
+        ),
+    },
+  ];
+
+  const handleEditUser = (id, email, nombre, apellido, rol) => {
+    setSelectedUser({ id, email, nombre, apellido, rol });
+    setIsModalOpen(true);
+  };
 
   // Filtering Logic
   const filteredUsers = useMemo(() => {
@@ -151,9 +185,7 @@ const UsuariosAdminPage = () => {
                   }
                 }}
               >
-                {
-                  hablitados ? "Restringir acceso" : "Habilitar acceso"
-                }
+                {hablitados ? "Restringir acceso" : "Habilitar acceso"}
               </button>
             </div>
           </div>
@@ -168,8 +200,63 @@ const UsuariosAdminPage = () => {
             </p>
           }
           <br />
-          <DataTable columns={columns} data={paginatedUsers} />
+          <DataTable
+            columns={columns}
+            data={paginatedUsers}
+            actions={actions}
+          />
+          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+            <div className="space-y-6 p-4">
+              <h2 className="text-3xl font-bold text-amarillo-10 text-center pb-2">
+                Editar Usuario
+              </h2>
+              {selectedUser && (
+                <div className="space-y-6">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h2 className="text-xl text-azul-10 text-center mb-6">
+                      En esta sección usted podrá editar el perfil del siguiente
+                      usuario:
+                    </h2>
 
+                    <div className="flex flex-row justify-between bg-white border-solid border-2 border-azul-10 rounded-lg p-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-semibold text-azul-10">
+                            Nombre:
+                          </span>
+                          <span className="text-gray-700">
+                            {selectedUser.nombre} {selectedUser.apellido}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="font-semibold text-azul-10">
+                            Email:
+                          </span>
+                          <span className="text-gray-700">
+                            {selectedUser.email}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        <div className="flex items-center space-x-2">
+                          <span className="px-3 py-1 bg-azul-10 text-white rounded-full text-sm">
+                            {selectedUser.rol}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-lg">
+                    <ActualizarUsuarioExterno
+                      setRender={setRender}
+                      render={render}
+                      user={selectedUser}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </Modal>
           {/* Pagination */}
           <Pagination
             currentPage={currentPage}
@@ -178,9 +265,7 @@ const UsuariosAdminPage = () => {
           />
         </div>
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
-          <p className="text-2xl text-azul-10 font-bold">
-            Registrar
-          </p>
+          <p className="text-2xl text-azul-10 font-bold">Registrar</p>
           <RegisterGuardiaUser setRender={setRender} render={render} />
         </div>
       </div>
