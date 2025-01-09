@@ -5,6 +5,10 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+   esbuild: {
+    jsxFactory: 'React.createElement',
+    jsxFragment: 'React.Fragment',
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -19,5 +23,7 @@ export default defineConfig({
   },
   test: {
     environment: "happy-dom",
+    globals: true,
+    setupFiles: "./src/setupTests.js",
   },
 });
