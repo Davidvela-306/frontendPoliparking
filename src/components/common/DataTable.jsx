@@ -13,15 +13,9 @@
  * @returns {ReactElement} - A JSX element representing the table.
  */
 
-const DataTable = ({ columns, data, actions }) => {
+const DataTable=({ columns, data, actions }) => {
   if (!data || data.length === 0) {
     return <p>No hemos encontrado coincidencias</p>;
-  }
-  if (!columns || columns.length === 0) {
-    return <p>columns</p>;
-  }
-  if (actions && actions.length === 0) {
-    return <p>actions</p>;
   }
 
   return (

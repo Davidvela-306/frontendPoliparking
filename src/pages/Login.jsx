@@ -41,6 +41,7 @@ const Login = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset,
   } = useForm({
     defaultValues: {
       rol: "",
@@ -79,6 +80,7 @@ const Login = () => {
           error.response?.data?.msg || "Ha ocurrido un error, intente de nuevo",
         tipo: false,
       });
+      reset();
     }
   };
 
@@ -104,13 +106,15 @@ const Login = () => {
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col w-full mb-3"
+              data-testid="login-form"
             >
               {/* Rol Selection */}
               <div className="w-full flex justify-between mb-1">
-                <Label text="Rol" />
+                <Label htmlFor="rol" text="Rol" />
                 {errors.rol && <AlertText text="Rol es obligatorio" />}
               </div>
               <select
+                id="rol"
                 className={`w-full p-2 rounded-md border ${
                   selectedRol ? "text-black" : "text-slate-400"
                 }`}
@@ -128,10 +132,11 @@ const Login = () => {
 
               {/* Email Input */}
               <div className="w-full flex justify-between mt-4 mb-1">
-                <Label text="Email" />
+                <Label htmlFor="email" text="Email" />
                 {errors.email && <AlertText text="El email es obligatorio" />}
               </div>
               <Input
+                id="email"
                 type="email"
                 placeholder="JuanPerez@gmail.com"
                 {...register("email", {
@@ -145,7 +150,7 @@ const Login = () => {
 
               {/* Password Input */}
               <div className="w-full flex justify-between mt-4 mb-1">
-                <Label text="Contraseña" />
+                <Label htmlFor="password" text="Contraseña" />
                 {errors.password && (
                   <AlertText
                     text={
@@ -156,6 +161,7 @@ const Login = () => {
               </div>
               <div className="relative">
                 <Input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="***********"
                   {...register("password", {
@@ -185,7 +191,10 @@ const Login = () => {
                 Ingresar
               </Button>
             </form>
-            <Link to="/recuperar-contrasena" className="text-center text-azul-10 hover:underline">
+            <Link
+              to="/recuperar-contrasena"
+              className="text-center text-azul-10 hover:underline"
+            >
               ¿Olvidaste tu contraseña?
             </Link>
           </Card>

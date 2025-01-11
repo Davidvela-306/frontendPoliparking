@@ -21,6 +21,8 @@ const PerfilUsuariosPage = () => {
   useEffect(() => {
     fetchUserData();
   }, [token]);
+  console.log("userData", userData);
+  
 
   return (
     <div className="mt-10 flex flex-col items-center justify-start h-[70vh] px-5">
