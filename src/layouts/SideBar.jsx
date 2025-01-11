@@ -15,7 +15,7 @@ import { Card } from "../components/ui";
 export const SideBar = ({ header, leftSide, children }) => {
   return (
     <section className="layout">
-      <section className="header">
+      <section className="header" role="banner">
         {header || <div>Default Header</div>}
       </section>
       <section className="leftSide">

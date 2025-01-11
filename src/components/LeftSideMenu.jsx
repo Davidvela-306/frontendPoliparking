@@ -11,6 +11,8 @@ const Avatar = ({ src, alt, size = 40 }) => {
 
 function LeftSideMenu({ data }) {
   const { user } = useAuth();
+  if (!user) return <p>No hay usuario</p>;
+  if (!data) return <p>No hay datos</p>;
   return (
     <nav>
       <div className="flex flex-col items-center m-5">
@@ -28,9 +30,7 @@ function LeftSideMenu({ data }) {
       </div>
       <ul>
         {data.map((item) => (
-          <li key={item.id}>
-            <ButtonMenu item={item} />
-          </li>
+          <ButtonMenu key={item.id} item={item} />
         ))}
       </ul>
     </nav>

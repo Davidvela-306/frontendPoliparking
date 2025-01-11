@@ -10,14 +10,19 @@ const ParqueaderosAdminPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [especialSpaceState, setEspecialSpaceState] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const { token } = useAuth();
 
   useEffect(() => {
+    setIsLoading(true);
+
     parkingService.getParking().then((response) => {
       setParkingSpaces(response);
       if (response && response.length > 0 && response[0].espacios) {
         setEspecialSpaceState(response[0].espacios[5].estado);
       }
+      setIsLoading(false);
     });
   }, [token]);
 
@@ -36,7 +41,6 @@ const ParqueaderosAdminPage = () => {
   });
 
   const onSubmit = (data) => {
-
     parkingService
       .updateParking(token, parkingSpaces[0]._id, data)
       .then(() => {
@@ -67,7 +71,7 @@ const ParqueaderosAdminPage = () => {
       });
   };
 
-  if (!parkingSpaces) {
+  if (isLoading) {
     return <p>Cargando...</p>;
   }
 

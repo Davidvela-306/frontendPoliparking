@@ -50,7 +50,7 @@ const RegisterAdminUser = ({ setRender, render }) => {
   };
 
   const fields = [
-    { label: "Nombre", name: "nombre", type: "text", placeholder:"Joe" },
+    { label: "Nombre", name: "nombre", type: "text", placeholder:"Joe", },
     { label: "Apellido", name: "apellido", type: "text", placeholder:"Doe" },
     { label: "Cedula", name: "cedula", type: "number", placeholder:"0498733281" },
     { label: "Email", name: "email", type: "email", placeholder:"joeDoe@gmail.com" },
@@ -71,10 +71,12 @@ const RegisterAdminUser = ({ setRender, render }) => {
           <div key={index} className="w-full flex justify-between my-1">
             <Label
               text={field.label}
+              htmlFor={field.name}
               className="flex text-azul-10 justify-center items-center"
             />
             {field.type === "select" ?
               <select
+                id={field.name}
                 className={`w-1/2 rounded-md p-2 border ${
                   errors[field.name] ? "border-red-500" : "border-gray-300"
                 }`}
@@ -92,6 +94,7 @@ const RegisterAdminUser = ({ setRender, render }) => {
                 ))}
               </select>
             : <Input
+                id={field.name}
                 type={field.type}
                 placeholder={field.placeholder}
                 className={` border ${

@@ -41,7 +41,7 @@ const FormularioG = ({ onUpdateSuccess }) => {
       {alert && <CustomAlert type={alert.type} message={alert.message} />}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
         <div className="w-full flex justify-between">
-          <Label text="Telefono" />
+          <Label text="Teléfono" />
           {errors.telefono && <AlertText text="El campo es obligatorio" />}
         </div>
         <Input

@@ -107,11 +107,11 @@ const UsuariosAdminPage = () => {
     <>
      
       <div className="mb-5 text-justify flex flex-col">
-        <h className="text-4xl text-azul-10 font-bold">Usuarios externos</h>
-        <h className="text-1xl text-azul-10">
+        <h1 className="text-4xl text-azul-10 font-bold">Usuarios externos</h1>
+        <h1 className="text-1xl text-azul-10">
           Este módulo te permite gestionar usuarios externos( personal
           administrativo, docente e invitado)
-        </h>
+        </h1>
       </div>
       <div className="flex flex-row">
         <div className="container mx-auto px-4 py-8">

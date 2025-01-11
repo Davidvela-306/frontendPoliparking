@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [rol, setRol] = useState(null);
-  const [token, setToken]=useState(null);
+  const [token, setToken] = useState(null);
   // const [userData, setUserData]=useState({
   //   user: null,
   //   isAuth: false,

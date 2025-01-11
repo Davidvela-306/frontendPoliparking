@@ -8,13 +8,18 @@ const ParqueaderosGuardiasPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
   const [estadoParqueadero, setEstadoParqueadero] = useState(null);
   const [especialSpaceState, setEspecialSpaceState] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { token } = useAuth();
 
   useEffect(() => {
+    setIsLoading(true);
     parkingService.getParking().then((response) => {
-      setEstadoParqueadero(response[0].estado);
-      setParkingSpaces(response);
-      setEspecialSpaceState(response[0].espacios[5].estado);
+      if (response && response.length > 0) {
+        setEstadoParqueadero(response[0].estado);
+        setParkingSpaces(response);
+        setEspecialSpaceState(response[0].espacios[5].estado);
+      }
+      setIsLoading(false);
     });
   }, [token]);
 
@@ -61,7 +66,7 @@ const ParqueaderosGuardiasPage = () => {
     };
   }, [especialSpaceState, handleSpecialSpaceChange]);
 
-  if (!parkingSpaces) {
+  if (isLoading) {
     return <p>Cargando...</p>;
   }
 
