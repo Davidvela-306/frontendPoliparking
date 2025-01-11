@@ -60,7 +60,7 @@ const ParqueaderosUserPage = () => {
                     Si desea más información de este suceso o desea reservar,
                     por favor comuníquese al siguiente número:
                     <span className="text-lg font-bold text-orange-500">
-                      +34 123 456 789
+                     02 345 6789
                     </span>
                   </p>
                 </div>

@@ -39,7 +39,7 @@ const InfoLeyend = () => (
         Si desea reservar la plaza{" "}
         <span className="font-bold">para persona con discapaciodad</span> del
         estacionamiento puede comunicarce al siguiente número:{" "}
-        <span className="font-bold text-orange-500">+34 123 456 789</span>
+        <span className="font-bold text-orange-500">02 345 6789</span>
       </h3>
     </div>
   </div>
