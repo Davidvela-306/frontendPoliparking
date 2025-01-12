@@ -1,4 +1,6 @@
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@context/AuthContext";
+import parking from "@images/parking-amico.svg";
+
 const Inicio = () => {
   const { user } = useAuth();
   return (
@@ -12,7 +14,7 @@ const Inicio = () => {
         {/* Imagen con opacidad */}
         <div className="w-1/2">
           <img
-            src="/src/assets/images/parking-amico.svg"
+            src={parking}
             alt="Parking illustration"
             className="object-cover w-full h-full opacity-30"
           />

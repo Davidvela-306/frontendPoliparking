@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@context/AuthContext";
-
+import carretera from "@images/carretera.png";
+import logoBuho from "@images/logoBuho.png";
 import {
   LogoTitle,
   Mensaje,
@@ -88,7 +89,7 @@ const Login = () => {
     <div className="flex flex-col lg:flex-row w-full h-screen">
       <div className="h-screen lg:w-2/3 bg-celeste-20 flex flex-col items-center justify-center gap-5 px-4 sm:px-10">
         <LogoTitle
-          imgSrc="/src/assets/images/logoBuho.png"
+          imgSrc={logoBuho}
           imgAlt="Logo"
           text="Poli Parking"
         />
@@ -204,7 +205,7 @@ const Login = () => {
       {/* Background Image */}
       <div className="hidden h-0 md:flex md:w-1/3">
         <img
-          src="/src/assets/images/carretera.png"
+          src={carretera}
           alt="carretera"
           className="w-full h-screen object-cover"
         />

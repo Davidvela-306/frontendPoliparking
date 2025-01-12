@@ -1,16 +1,16 @@
 import "../styles/sideBar.css";
 import { Link } from "react-router-dom";
-import logoEsfotBuho from "@assets/images/logo_esfot_buho.png";
+import logoEsfotBuho from "@images/logo_esfot_buho.png";
 
-import Header from "../components/Header";
-import LeftSideMenu from "../components/LeftSideMenu";
+import Header from "@components/Header";
+import LeftSideMenu from "@components/LeftSideMenu";
 import {
   adminNavData,
   GeneralNavData,
   guardiaNavData,
   usuarioNavData,
 } from "../assets/data/NavData";
-import { Card } from "../components/ui";
+import { Card } from "@components/ui";
 
 export const SideBar = ({ header, leftSide, children }) => {
   return (

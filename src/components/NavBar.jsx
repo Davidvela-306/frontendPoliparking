@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ButtonMenu } from "./ui";
 import { GeneralNavData } from "../assets/data/NavData";
+import logoEsfotBuho from "@images/logo_esfot_buho.png";
 
 const NavBar = ({ children }) => {
   return (
@@ -9,7 +10,7 @@ const NavBar = ({ children }) => {
         <div>
           <Link to="/">
             <img
-              src="\src\assets\images\logo_esfot_buho.png"
+              src={logoEsfotBuho}
               alt=""
               className="w-20"
             />

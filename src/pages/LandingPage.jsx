@@ -4,6 +4,7 @@ import {
   Services,
   Footer,
 } from "@components/landing/index";
+import logoEsfotBuho from "@images/logo_esfot_buho.png";
 const footerLinks = [
   { text: "", href: "/" },
   { text: "", href: "/" },
@@ -35,7 +36,7 @@ const LandingPage = () => {
         />
       </div>
       <Footer
-        logoSrc="/src/assets/images/logo_esfot_buho.png"
+        logoSrc={logoEsfotBuho}
         logoAlt="Logo del parqueadero"
         links={footerLinks}
       />

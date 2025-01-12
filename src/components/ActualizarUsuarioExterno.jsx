@@ -132,7 +132,7 @@ const ActualizarUsuarioExterno = ({ setRender, render, user }) => {
           <AlertText text="Debe llenar todos los campos correctamente" />
         )}
         <Button type="submit" disabled={!isValid}>
-          Registrar
+          Actualizar datos
         </Button>
       </form>
     </div>

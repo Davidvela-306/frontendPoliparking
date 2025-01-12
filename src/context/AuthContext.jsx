@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchPost } from "../helpers/request_functions";
+import { fetchPost } from "@helpers/request_functions";
 import {
   baseUsuarios,
   baseAdmin,

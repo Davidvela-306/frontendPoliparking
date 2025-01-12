@@ -5,14 +5,15 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-   esbuild: {
-    jsxFactory: 'React.createElement',
-    jsxFragment: 'React.Fragment',
+  esbuild: {
+    jsxFactory: "React.createElement",
+    jsxFragment: "React.Fragment",
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
       "@assets": path.resolve(__dirname, "src/assets"),
+      "@images": path.resolve(__dirname, "src/images"),
       "@components": path.resolve(__dirname, "src/components"),
       "@context": path.resolve(__dirname, "src/context"),
       "@helpers": path.resolve(__dirname, "src/helpers"),

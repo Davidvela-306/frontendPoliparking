@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { AlertText, Button, Label, Input } from "@components/ui/index";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@context/AuthContext";
 import adminService from "@/services/adminService";
 
 /**

@@ -1,19 +1,22 @@
 import { LogoTitle } from "@components/ui/index";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@context/AuthContext";
+import carImage from "@images/car.png";
+import logoBuho from "@images/logoBuho.png";
+
 
 const Header = () => {
   const { signout } = useAuth();
   return (
     <>
       <LogoTitle
-        imgSrc="\src\assets\images\logoBuho.png"
+        imgSrc={logoBuho}
         imgAlt="Logo"
         text="Poli Parking"
       />
       <div className="flex items-center gap-x-5">
         <img
           className="w-16"
-          src="\src\assets\images\car.png"
+          src={carImage}
           alt="Logo Poli parking"
         />
         <button

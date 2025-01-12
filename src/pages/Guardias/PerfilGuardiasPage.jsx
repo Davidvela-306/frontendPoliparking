@@ -5,7 +5,7 @@ import {
   ActualizarContraseña,
 } from "@components/Perfil/index";
 import guardiaService from "@/services/guardiaService";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@context/AuthContext";
 
 const PerfilGuardiasPage = () => {
   const { token } = useAuth();

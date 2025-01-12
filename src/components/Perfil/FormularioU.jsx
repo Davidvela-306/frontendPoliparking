@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context/AuthContext";
-import { AlertText } from "../../components/ui/AlertText";
-import { Input, Button, Label } from "../../components/ui";
-import CustomAlert from "../../components/ui/CustomAlert";
-import { fetchPut } from "../../helpers/request_functions";
-import { baseUsuarios } from "../../helpers/instances_routes";
+import { useAuth } from "@context/AuthContext";
+import { AlertText } from "@components/ui/AlertText";
+import { Input, Button, Label } from "@components/ui";
+import CustomAlert from "@components/ui/CustomAlert";
+import { fetchPut } from "@helpers/request_functions";
+import { baseUsuarios } from "@helpers/instances_routes";
 
 const FormularioU = ({ onUpdateSuccess }) => {
   const { user, token } = useAuth();

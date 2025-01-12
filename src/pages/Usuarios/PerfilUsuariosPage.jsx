@@ -5,7 +5,7 @@ import {
   FormularioU,
 } from "@components/Perfil/index";
 import userService from "@/services/userService";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "@context/AuthContext";
 
 const PerfilUsuariosPage = () => {
   const { token } = useAuth();
