@@ -5,24 +5,31 @@ import { useAuth } from "@context/AuthContext";
 
 const ParqueaderosUserPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [estadoParqueadero, setEstadoParqueadero] = useState(null);
   const [especialSpaceState, setEspecialSpaceState] = useState(false);
 
   const { token } = useAuth();
 
   useEffect(() => {
-    parkingService.getParking().then((response) => {
-      setEstadoParqueadero(response[0].estado);
-      setParkingSpaces(response);
-      setEspecialSpaceState(response[0].espacios[0].estado);
-    });
+    setIsLoading(true);
+    parkingService
+      .getParking()
+      .then((response) => {
+        setEstadoParqueadero(response[0].estado);
+        setParkingSpaces(response);
+        setEspecialSpaceState(response[0].espacios[0].estado);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [token]);
 
-  if (!parkingSpaces) {
-    return <p>Cargando...</p>;
+  if (isLoading) {
+    return <p className="text-center text-azul-10 text-2xl">Cargando...</p>;
   }
 
-  if (parkingSpaces.length === 0) {
+  if (!parkingSpaces || parkingSpaces.length === 0) {
     return <p>No hay parqueaderos cargados en el sistema</p>;
   }
 

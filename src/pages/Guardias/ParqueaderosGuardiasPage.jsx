@@ -67,7 +67,8 @@ const ParqueaderosGuardiasPage = () => {
   }, [especialSpaceState, handleSpecialSpaceChange]);
 
   if (isLoading) {
-    return <p>Cargando...</p>;
+    return <p className="text-2xl text-azul-10 text-center">Cargando...</p>;
+
   }
 
   if (parkingSpaces.length === 0) {

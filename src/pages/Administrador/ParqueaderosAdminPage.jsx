@@ -16,7 +16,6 @@ const ParqueaderosAdminPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-
     parkingService.getParking().then((response) => {
       setParkingSpaces(response);
       if (response && response.length > 0 && response[0].espacios) {
@@ -72,7 +71,7 @@ const ParqueaderosAdminPage = () => {
   };
 
   if (isLoading) {
-    return <p>Cargando...</p>;
+    return <p className="text-center text-azul-10 text-2xl">Cargando...</p>;
   }
 
   if (parkingSpaces.length === 0) {

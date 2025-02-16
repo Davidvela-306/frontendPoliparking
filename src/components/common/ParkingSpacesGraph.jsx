@@ -37,7 +37,7 @@ const InfoLeyend = () => (
       <Info size={70} />
       <h3 className="text-base ">
         Si desea reservar la plaza{" "}
-        <span className="font-bold">para persona con discapaciodad</span> del
+        <span className="font-bold">para persona con discapacidad</span> del
         estacionamiento puede comunicarce al siguiente número:{" "}
         <span className="font-bold text-orange-500">02 345 6789</span>
       </h3>
