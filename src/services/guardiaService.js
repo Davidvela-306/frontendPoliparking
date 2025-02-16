@@ -11,7 +11,7 @@ const guardiaService = {
       const response = await fetchGet(baseGuardias, "/perfil", token);
       return response.data;
     } catch (error) {
-      console.error(error);
+      throw new Error(error);
     }
   },
   async getExternalUsers({ token }) {
@@ -19,8 +19,7 @@ const guardiaService = {
       const response = await fetchGet(baseGuardias, "/listar-usuarios", token);
       return response.data;
     } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
+      throw new Error(error);
     }
   },
   async createExternalUser({ token, user }) {
@@ -28,7 +27,7 @@ const guardiaService = {
       const response = await fetchPost(baseGuardias, "/registrar", user, token);
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 
@@ -42,7 +41,7 @@ const guardiaService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
   async changeSpecialSpace(token, parkingId, data) {
@@ -55,7 +54,7 @@ const guardiaService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 
@@ -65,7 +64,6 @@ const guardiaService = {
 
       return response.data;
     } catch (error) {
-      console.error("Error en la confirmación del token:", error);
       throw new Error("El token no es válido.");
     }
   },
@@ -78,7 +76,7 @@ const guardiaService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
   async enableUsers(token) {
@@ -91,7 +89,7 @@ const guardiaService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
   async updateExternalUser(id, token, data) {

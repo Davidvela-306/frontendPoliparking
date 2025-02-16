@@ -35,7 +35,6 @@ const ActualizarUsuarioExterno = ({ setRender, render, user }) => {
   const onSubmit = async (values) => {
     try {
         const dataToUpdate={ ...values, estado: true };
-        console.log("dataToUpdate", dataToUpdate);
       guardiaService
         .updateExternalUser(user.id, token, dataToUpdate)
         .then(() => {
@@ -49,7 +48,6 @@ const ActualizarUsuarioExterno = ({ setRender, render, user }) => {
           throw Error(error);
         });
     } catch (error) {
-      console.error("Full error details:", error);
       alert(`Error al crear el usuario: ${error.message}`);
     }
   };

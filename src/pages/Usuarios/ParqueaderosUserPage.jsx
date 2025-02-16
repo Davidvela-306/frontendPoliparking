@@ -5,24 +5,31 @@ import { useAuth } from "@context/AuthContext";
 
 const ParqueaderosUserPage = () => {
   const [parkingSpaces, setParkingSpaces] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [estadoParqueadero, setEstadoParqueadero] = useState(null);
   const [especialSpaceState, setEspecialSpaceState] = useState(false);
 
   const { token } = useAuth();
 
   useEffect(() => {
-    parkingService.getParking().then((response) => {
-      setEstadoParqueadero(response[0].estado);
-      setParkingSpaces(response);
-      setEspecialSpaceState(response[0].espacios[5].estado);
-    });
+    setIsLoading(true);
+    parkingService
+      .getParking()
+      .then((response) => {
+        setEstadoParqueadero(response[0].estado);
+        setParkingSpaces(response);
+        setEspecialSpaceState(response[0].espacios[0].estado);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [token]);
 
-  if (!parkingSpaces) {
-    return <p>Cargando...</p>;
+  if (isLoading) {
+    return <p className="text-center text-azul-10 text-2xl">Cargando...</p>;
   }
 
-  if (parkingSpaces.length === 0) {
+  if (!parkingSpaces || parkingSpaces.length === 0) {
     return <p>No hay parqueaderos cargados en el sistema</p>;
   }
 
@@ -35,7 +42,7 @@ const ParqueaderosUserPage = () => {
           </h>
           <h className="text-1xl text-azul-10">
             Este módulo te permite visualizar la disponibilidad de las plazas de
-            estacionamiento del parqueadero de la ESFOT.
+            estacionamiento del parqueadero {parkingSpaces[0].nombre}.
           </h>
         </div>
 
@@ -60,7 +67,7 @@ const ParqueaderosUserPage = () => {
                     Si desea más información de este suceso o desea reservar,
                     por favor comuníquese al siguiente número:
                     <span className="text-lg font-bold text-orange-500">
-                     02 345 6789
+                      02 345 6789
                     </span>
                   </p>
                 </div>

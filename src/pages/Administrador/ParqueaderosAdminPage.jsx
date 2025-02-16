@@ -16,11 +16,10 @@ const ParqueaderosAdminPage = () => {
 
   useEffect(() => {
     setIsLoading(true);
-
     parkingService.getParking().then((response) => {
       setParkingSpaces(response);
       if (response && response.length > 0 && response[0].espacios) {
-        setEspecialSpaceState(response[0].espacios[5].estado);
+        setEspecialSpaceState(response[0].espacios[0].estado);
       }
       setIsLoading(false);
     });
@@ -67,12 +66,12 @@ const ParqueaderosAdminPage = () => {
         }, 3000);
       })
       .catch((error) => {
-        console.error("Error:", error);
+        throw Error(error);
       });
   };
 
   if (isLoading) {
-    return <p>Cargando...</p>;
+    return <p className="text-center text-azul-10 text-2xl">Cargando...</p>;
   }
 
   if (parkingSpaces.length === 0) {

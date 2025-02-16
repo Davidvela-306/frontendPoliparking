@@ -44,7 +44,6 @@ const RegisterAdminUser = ({ setRender, render }) => {
         alert("Error al crear el usuario: no se recibió una respuesta válida");
       }
     } catch (error) {
-      console.error("Full error details:", error);
       alert(`Error al crear el usuario: ${error.message}`);
     }
   };

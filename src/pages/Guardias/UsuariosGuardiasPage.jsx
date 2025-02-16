@@ -14,13 +14,16 @@ import RegisterGuardiaUser from "@/components/RegisterGuardiaUser";
  */
 const UsuariosAdminPage = () => {
   const [filterUsers, setFilterUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [render, setRender] = useState(false);
   const [hablitados, setHabilitados] = useState(true);
 
   const { token } = useAuth();
 
   const fetchUsers = async (token) => {
+    setIsLoading(true);
     const response = await guardiaService.getExternalUsers(token);
+    setIsLoading(false);
     return response;
   };
 
@@ -129,141 +132,148 @@ const UsuariosAdminPage = () => {
         </h>
       </div>
       <div className="flex flex-row items-center">
-        <div className="container mx-auto px-4 py-8">
-          {/* Search Input */}
-          <div className="mb-4">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder="Buscar por nombre, apellido, email, placa de vehículo, teléfono..."
-              className="w-full px-3 py-2 border-solid border-4 border-negro rounded"
-            />
+        {isLoading ?
+          <div className="container mx-auto px-4 py-8 text-center">
+            <p className="text-2xl text-azul-10">Cargando...</p>
           </div>
-
-          {/* Filter buttons */}
-          <div className="flex flex-row justify-between">
+        : <div className="container mx-auto px-4 py-8">
+            {/* Search Input */}
             <div className="mb-4">
-              <button
-                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-                onClick={() => {
-                  setCurrentPage(1);
-                  setFilterRole("");
-                }}
-              >
-                Todos
-              </button>
-              <button
-                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-                onClick={() => handleFilterByRole("Administrativo")}
-              >
-                administrativo
-              </button>
-              <button
-                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-                onClick={() => handleFilterByRole("Estudiante")}
-              >
-                estudiante
-              </button>
-              <button
-                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-                onClick={() => handleFilterByRole("docente")}
-              >
-                docente
-              </button>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Buscar por nombre, apellido, email, placa de vehículo, teléfono..."
+                className="w-full px-3 py-2 border-solid border-4 border-negro rounded"
+              />
             </div>
-            <div>
-              <button
-                className="px-4 py-2 bg-azul-10 text-white border-solid border-2 border-amarillo-10 focus:bg-azul-20 focus:text-white rounded mr-2"
-                onClick={async () => {
-                  try {
-                    setHabilitados(!hablitados);
-                    const response = await guardiaService.enableUsers(token);
-                    console.log(response);
-                  } catch (error) {
-                    console.error("Error:", error);
-                  }
-                }}
-              >
-                {hablitados ? "Restringir acceso" : "Habilitar acceso"}
-              </button>
+
+            {/* Filter buttons */}
+            <div className="flex flex-row justify-between">
+              <div className="mb-4">
+                <button
+                  className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    setFilterRole("");
+                  }}
+                >
+                  Todos
+                </button>
+                <button
+                  className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                  onClick={() => handleFilterByRole("Administrativo")}
+                >
+                  administrativo
+                </button>
+                <button
+                  className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                  onClick={() => handleFilterByRole("Estudiante")}
+                >
+                  estudiante
+                </button>
+                <button
+                  className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                  onClick={() => handleFilterByRole("docente")}
+                >
+                  docente
+                </button>
+              </div>
+              <div>
+                <button
+                  className="px-4 py-2 bg-azul-10 text-white border-solid border-2 border-amarillo-10 focus:bg-azul-20 focus:text-white rounded mr-2"
+                  onClick={async () => {
+                    try {
+                      setHabilitados(!hablitados);
+                      await guardiaService.enableUsers(token);
+                    } catch (error) {
+                      throw new Error(
+                        `Error al habilitar/deshabilitar usuarios: ${error.message}`,
+                      );
+                    }
+                  }}
+                >
+                  {hablitados ? "Restringir acceso" : "Habilitar acceso"}
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* DataTable */}
-          {hablitados ?
-            <p className="text-green-500">
-              Los usuarios se encuntran habilitados para ingresar al sistema
-            </p>
-          : <p className="text-red-500">
-              Los usuarios no se encuntran habilitados para ingresar al sistema
-            </p>
-          }
-          <br />
-          <DataTable
-            columns={columns}
-            data={paginatedUsers}
-            actions={actions}
-          />
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-            <div className="space-y-6 p-4">
-              <h2 className="text-3xl font-bold text-amarillo-10 text-center pb-2">
-                Editar Usuario
-              </h2>
-              {selectedUser && (
-                <div className="space-y-6">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h2 className="text-xl text-azul-10 text-center mb-6">
-                      En esta sección usted podrá editar el perfil del siguiente
-                      usuario:
-                    </h2>
+            {/* DataTable */}
+            {hablitados ?
+              <p className="text-green-500">
+                Los usuarios se encuntran habilitados para ingresar al sistema
+              </p>
+            : <p className="text-red-500">
+                Los usuarios no se encuntran habilitados para ingresar al
+                sistema
+              </p>
+            }
+            <br />
+            <DataTable
+              columns={columns}
+              data={paginatedUsers}
+              actions={actions}
+            />
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+              <div className="space-y-6 p-4">
+                <h2 className="text-3xl font-bold text-amarillo-10 text-center pb-2">
+                  Editar Usuario
+                </h2>
+                {selectedUser && (
+                  <div className="space-y-6">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h2 className="text-xl text-azul-10 text-center mb-6">
+                        En esta sección usted podrá editar el perfil del
+                        siguiente usuario:
+                      </h2>
 
-                    <div className="flex flex-row justify-between bg-white border-solid border-2 border-azul-10 rounded-lg p-4">
-                      <div className="space-y-3">
-                        <div className="flex items-center space-x-2">
-                          <span className="font-semibold text-azul-10">
-                            Nombre:
-                          </span>
-                          <span className="text-gray-700">
-                            {selectedUser.nombre} {selectedUser.apellido}
-                          </span>
+                      <div className="flex flex-row justify-between bg-white border-solid border-2 border-azul-10 rounded-lg p-4">
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-2">
+                            <span className="font-semibold text-azul-10">
+                              Nombre:
+                            </span>
+                            <span className="text-gray-700">
+                              {selectedUser.nombre} {selectedUser.apellido}
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="font-semibold text-azul-10">
+                              Email:
+                            </span>
+                            <span className="text-gray-700">
+                              {selectedUser.email}
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="font-semibold text-azul-10">
-                            Email:
-                          </span>
-                          <span className="text-gray-700">
-                            {selectedUser.email}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="flex items-center space-x-2">
-                          <span className="px-3 py-1 bg-azul-10 text-white rounded-full text-sm">
-                            {selectedUser.rol}
-                          </span>
+                        <div className="flex items-center">
+                          <div className="flex items-center space-x-2">
+                            <span className="px-3 py-1 bg-azul-10 text-white rounded-full text-sm">
+                              {selectedUser.rol}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
+                    <div className="bg-white rounded-lg">
+                      <ActualizarUsuarioExterno
+                        setRender={setRender}
+                        render={render}
+                        user={selectedUser}
+                      />
+                    </div>
                   </div>
-                  <div className="bg-white rounded-lg">
-                    <ActualizarUsuarioExterno
-                      setRender={setRender}
-                      render={render}
-                      user={selectedUser}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </Modal>
-          {/* Pagination */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
-            onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
-          />
-        </div>
+                )}
+              </div>
+            </Modal>
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
+              onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
+            />
+          </div>
+        }
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
           <p className="text-2xl text-azul-10 font-bold">Registrar</p>
           <RegisterGuardiaUser setRender={setRender} render={render} />

@@ -28,7 +28,6 @@ const FormularioG = ({ onUpdateSuccess }) => {
         setAlert(null);
       }, 5000);
     } catch (error) {
-      console.error(error);
       setAlert({ type: "error", message: "Error al actualizar el teléfono" });
       setTimeout(() => {
         setAlert(null);

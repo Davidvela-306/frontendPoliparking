@@ -37,7 +37,7 @@ const InfoLeyend = () => (
       <Info size={70} />
       <h3 className="text-base ">
         Si desea reservar la plaza{" "}
-        <span className="font-bold">para persona con discapaciodad</span> del
+        <span className="font-bold">para persona con discapacidad</span> del
         estacionamiento puede comunicarce al siguiente número:{" "}
         <span className="font-bold text-orange-500">02 345 6789</span>
       </h3>
@@ -113,8 +113,8 @@ const positions = [
   { x: 300, y: 70 },
   { x: 665, y: 320 },
   { x: 665, y: 500 },
-  { x: 100, y: 700 },
   { x: 300, y: 700 },
+  { x: 100, y: 700 },
 ];
 
 const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
@@ -134,7 +134,7 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
   ]);
   const [edges, onEdgesChange] = useEdgesState([]);
   const [spaceStates, setSpaceStates] = useState({});
-  const [lastSensorState, setLastSensorState] = useState(null);
+  // const [lastSensorState, setLastSensorState] = useState(null);
   const [autoReleasePending, setAutoReleasePending] = useState(false);
 
   useEffect(() => {
@@ -161,7 +161,7 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
                 setAutoReleasePending(true);
               }
 
-              setLastSensorState(valor);
+              // setLastSensorState(valor);
             }
           }
         });
@@ -191,8 +191,8 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
         if (!node.id.startsWith("container")) {
           const isNarrowNode = ["1", "2", "5", "6"].includes(node.id);
 
-          if (node.id === "6") {
-            const sensorOccupied = spaceStates[6] === "1";
+          if (node.id === "1") {
+            const sensorOccupied = spaceStates[1] === "1";
             const isAvailable = specialSpaceState && !sensorOccupied;
 
             return {
@@ -208,7 +208,7 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
                     }}
                     className="h-full bg-blue-300 text-black w-full flex justify-center items-center"
                   >
-                    <div>6</div>
+                    <div>1</div>
                     <div style={{ fontSize: "20px" }}>
                       {isAvailable ? "Disponible" : "Reservado"}
                     </div>
@@ -273,7 +273,7 @@ const ParkingSpacesGraph = ({ spaces, specialSpaceState }) => {
         zoomOnScroll
         zoomOnPinch
       >
-        <Controls  />
+        <Controls />
         {/* Opcional: Ocultar controles */}
         <Background
           variant="dots"

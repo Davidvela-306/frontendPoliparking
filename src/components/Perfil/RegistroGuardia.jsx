@@ -39,7 +39,6 @@ const RegistroGuardia = ({ setRender, render }) => {
         alert("Error al crear el Guardia: no se recibió una respuesta válida");
       }
     } catch (error) {
-      console.error("Full error details:", error);
       alert(`Error al crear el Guardia: ${error.message}`);
     }
   };

@@ -32,7 +32,6 @@ const ActualizarContraseña = () => {
       setError(
         error.response?.data?.msg || "Error al actualizar la contraseña",
       );
-      console.error(error);
     }
   };
 

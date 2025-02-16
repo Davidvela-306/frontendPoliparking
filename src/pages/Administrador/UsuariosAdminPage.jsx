@@ -11,12 +11,15 @@ import RegisterAdminUser from "@/components/RegisterAdminUser";
  */
 const UsuariosAdminPage = () => {
   const [filterUsers, setFilterUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [render, setRender] = useState(false);
 
   const { token } = useAuth();
 
   const fetchUsers = async (token) => {
+    setIsLoading(true);
     const response = await adminService.getExternalUsers(token);
+    setIsLoading(false);
     return response;
   };
 
@@ -105,7 +108,6 @@ const UsuariosAdminPage = () => {
 
   return (
     <>
-     
       <div className="mb-5 text-justify flex flex-col">
         <h1 className="text-4xl text-azul-10 font-bold">Usuarios externos</h1>
         <h1 className="text-1xl text-azul-10">
@@ -113,64 +115,69 @@ const UsuariosAdminPage = () => {
           administrativo, docente e invitado)
         </h1>
       </div>
-      <div className="flex flex-row">
-        <div className="container mx-auto px-4 py-8">
-          {/* Search Input */}
-          <div className="mb-4">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder="Buscar por nombre, apellido, email, placa de vehículo, teléfono..."
-              className="w-full px-3 py-2 border-solid border-4 border-negro rounded"
+      <div className="flex flex-row items-center">
+        {isLoading ?
+          <div className="container mx-auto px-4 py-8 text-center">
+            <p className="text-2xl text-azul-10">Cargando...</p>
+          </div>
+        : <div className="container mx-auto px-4 py-8">
+            {/* Search Input */}
+            <div className="mb-4">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Buscar por nombre, apellido, email, placa de vehículo, teléfono..."
+                className="w-full px-3 py-2 border-solid border-4 border-negro rounded"
+              />
+            </div>
+
+            {/* Filter buttons */}
+            <div className="mb-4">
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => {
+                  setCurrentPage(1);
+                  setFilterRole("");
+                }}
+              >
+                Todos
+              </button>
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => handleFilterByRole("Administrativo")}
+              >
+                administrativo
+              </button>
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => handleFilterByRole("Estudiante")}
+              >
+                estudiante
+              </button>
+              <button
+                className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
+                onClick={() => handleFilterByRole("docente")}
+              >
+                docente
+              </button>
+            </div>
+
+            {/* DataTable */}
+            <DataTable
+              columns={columns}
+              data={paginatedUsers}
+              actions={actions}
+            />
+
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
+              onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
             />
           </div>
-
-          {/* Filter buttons */}
-          <div className="mb-4">
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => {
-                setCurrentPage(1);
-                setFilterRole("");
-              }}
-            >
-              Todos
-            </button>
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => handleFilterByRole("Administrativo")}
-            >
-              administrativo
-            </button>
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => handleFilterByRole("Estudiante")}
-            >
-              estudiante
-            </button>
-            <button
-              className="px-4 py-2 bg-amarillo-10 text-black focus:bg-azul-20 focus:text-white rounded mr-2"
-              onClick={() => handleFilterByRole("docente")}
-            >
-              docente
-            </button>
-          </div>
-
-          {/* DataTable */}
-          <DataTable
-            columns={columns}
-            data={paginatedUsers}
-            actions={actions}
-          />
-
-          {/* Pagination */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
-            onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
-          />
-        </div>
+        }
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
           <p className="text-2xl text-azul-10 font-bold">Registrar</p>
           <RegisterAdminUser setRender={setRender} render={render} />

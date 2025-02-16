@@ -12,11 +12,14 @@ import { Pagination } from "@/components/common/index";
  */
 const GuardiasAdminPage = () => {
   const [filterGuardias, setFilterGuardias] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [render, setRender] = useState(false);
   const { token } = useAuth();
 
   const fetchUsers = async (token) => {
+    setIsLoading(true);
     const response = await adminService.getGuardias(token);
+    setIsLoading(false);
     return response;
   };
 
@@ -39,7 +42,6 @@ const GuardiasAdminPage = () => {
     { key: "telefono", label: "Teléfono" },
     { key: "estado", label: "Estado" },
   ];
-  // TODO: Cambiar el estado de un guardia
   const actions = [
     {
       label: "Eliminar",
@@ -80,7 +82,6 @@ const GuardiasAdminPage = () => {
 
   const handleDeleteGuardia = (id, email) => {
     if (window.confirm(`Deseas eliminar al usuario ${email}?`)) {
-
       setFilterGuardias(filterGuardias.filter((user) => user._id !== id));
       adminService
         .deleteGuardia(token, id)
@@ -93,7 +94,6 @@ const GuardiasAdminPage = () => {
     }
   };
   const handleChangeState = (id, email, state) => {
-
     if (window.confirm(`Deseas cambiar el estado del guardia ${email}?`)) {
       adminService
         .changeGuardiaState(token, id, state)
@@ -121,35 +121,42 @@ const GuardiasAdminPage = () => {
           Este módulo te permite gestionar guardias.
         </h>
       </div>
-      <div className="flex flex-row">
-        <div className="container mx-auto px-4 py-8">
-          {/* Search Input */}
-          <div className="mb-4">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              placeholder="Buscar por nombre, apellido, cédula, email o teléfono"
-              className="w-full px-3 py-2 border-solid border-4 border-negro rounded"
+      <div className="flex flex-row items-center">
+        {isLoading ?
+          <div className="container mx-auto px-4 py-8 text-center">
+            <p className="text-2xl text-azul-10">Cargando...</p>
+          </div>
+        : <div className="container mx-auto px-4 py-8">
+            {/* Search Input */}
+            <div className="mb-4">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Buscar por nombre, apellido, cédula, email o teléfono"
+                className="w-full px-3 py-2 border-solid border-4 border-negro rounded"
+              />
+            </div>
+
+            {/* DataTable */}
+            <DataTable
+              columns={columns}
+              data={paginatedUsers}
+              actions={actions}
+            />
+
+            {/* Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
+              onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
             />
           </div>
-
-          {/* DataTable */}
-          <DataTable
-            columns={columns}
-            data={paginatedUsers}
-            actions={actions}
-          />
-
-          {/* Pagination */}
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.ceil(filteredUsers.length / itemsPerPage)}
-            onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
-          />
-        </div>
+        }
         <div className="mt-5 text-center border-solid border-l-2 px-5 border-amarillo-10 ">
-          <p className="text-2xl text-azul-10 font-bold">Registrar nuevo guardia</p>
+          <p className="text-2xl text-azul-10 font-bold">
+            Registrar nuevo guardia
+          </p>
           <RegistroGuardia setRender={setRender} render={render} />
         </div>
       </div>
