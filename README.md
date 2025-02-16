@@ -100,7 +100,7 @@ El siguiente documento detalla el proceso de desarrollo y la implementación del
 
 ### 📌 Manual de Usuario
 
-A continuación, un video que documenta el funcionamiento del Backend con Swagger:  
+A continuación, un video que documenta el funcionamiento del Frontend:  
 [🎥 Manual de Usuario](https://www.youtube.com/watch?v=yyvhCNp7jI0)
 
 ---
