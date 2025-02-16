@@ -28,7 +28,6 @@ const FormularioU = ({ onUpdateSuccess }) => {
         setAlert(null);
       }, 5000);
     } catch (error) {
-      console.error(error);
       setAlert({
         type: "error",
         message: "Error al actualizar la información",

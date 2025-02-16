@@ -60,11 +60,7 @@ const ChangePassword = () => {
           window.location.href = "/singin";
         })
         .catch((error) => {
-          if (error instanceof Error) {
-            console.error("Error al cambiar la contraseña:", error);
-          } else {
-            console.error("Error al confirmar el token:", error);
-          }
+          throw Error(error);
         });
     }
 
@@ -81,11 +77,7 @@ const ChangePassword = () => {
           window.location.href = "/singin";
         })
         .catch((error) => {
-          if (error instanceof Error) {
-            console.error("Error al cambiar la contraseña:", error);
-          } else {
-            console.error("Error al confirmar el token:", error);
-          }
+          throw Error(error);
         });
     }
 
@@ -102,11 +94,7 @@ const ChangePassword = () => {
           window.location.href = "/singin";
         })
         .catch((error) => {
-          if (error instanceof Error) {
-            console.error("Error al cambiar la contraseña:", error);
-          } else {
-            console.error("Error al confirmar el token:", error);
-          }
+          throw Error(error);
         });
     }
   };

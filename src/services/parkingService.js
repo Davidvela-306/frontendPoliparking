@@ -6,7 +6,7 @@ const parkingService = {
       const response = await fetchGet(baseParqueaderos, "/", token);
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
   /**
@@ -27,7 +27,7 @@ const parkingService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 };

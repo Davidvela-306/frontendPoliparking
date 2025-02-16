@@ -17,7 +17,7 @@ const ParqueaderosGuardiasPage = () => {
       if (response && response.length > 0) {
         setEstadoParqueadero(response[0].estado);
         setParkingSpaces(response);
-        setEspecialSpaceState(response[0].espacios[5].estado);
+        setEspecialSpaceState(response[0].espacios[0].estado);
       }
       setIsLoading(false);
     });
@@ -30,7 +30,7 @@ const ParqueaderosGuardiasPage = () => {
     try {
       await guardiaService.changeSpecialSpace(token, parkingSpaces[0]._id, {
         estado: nuevoEstado,
-        numeroEspacio: "6",
+        numeroEspacio: "1",
       });
 
       setEspecialSpaceState(nuevoEstado);
@@ -48,7 +48,7 @@ const ParqueaderosGuardiasPage = () => {
         return newSpaces;
       });
     } catch (error) {
-      console.error("Error al cambiar el estado:", error);
+      throw new Error("Error al cambiar el estado de la plaza especial");
     }
   }, [especialSpaceState, parkingSpaces, token]);
 

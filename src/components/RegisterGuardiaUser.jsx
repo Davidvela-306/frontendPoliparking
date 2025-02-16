@@ -44,10 +44,9 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
           alert(
             "Error al crear el usuario: no se recibió una respuesta válida",
           );
-          console.error("Error:", error);
+          throw Error(error);
         });
     } catch (error) {
-      console.error("Full error details:", error);
       alert(`Error al crear el usuario: ${error.message}`);
     }
   };
@@ -55,11 +54,36 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
   const fields = [
     { label: "Nombre", name: "nombre", type: "text", placeholder: "Joe" },
     { label: "Apellido", name: "apellido", type: "text", placeholder: "Doe" },
-    { label: "Cedula", name: "cedula", type: "number", placeholder: "174695953" },
-    { label: "Email", name: "email", type: "email", placeholder: "JoeDoe@gmail.com" },
-    { label: "Contraseña", name: "password", type: "password", placeholder: "********" },
-    { label: "Telefono", name: "telefono", type: "number", placeholder: "099856953" },
-    { label: "Placa", name: "placa_vehiculo", type: "text", placeholder: "ABC-123" },
+    {
+      label: "Cedula",
+      name: "cedula",
+      type: "number",
+      placeholder: "174695953",
+    },
+    {
+      label: "Email",
+      name: "email",
+      type: "email",
+      placeholder: "JoeDoe@gmail.com",
+    },
+    {
+      label: "Contraseña",
+      name: "password",
+      type: "password",
+      placeholder: "********",
+    },
+    {
+      label: "Telefono",
+      name: "telefono",
+      type: "number",
+      placeholder: "099856953",
+    },
+    {
+      label: "Placa",
+      name: "placa_vehiculo",
+      type: "text",
+      placeholder: "ABC-123",
+    },
     {
       label: "Rol",
       name: "rol",

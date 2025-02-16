@@ -21,7 +21,6 @@ const PerfilUsuariosPage = () => {
   useEffect(() => {
     fetchUserData();
   }, [token]);
-  console.log("userData", userData);
   
 
   return (

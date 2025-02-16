@@ -42,7 +42,7 @@ const onSubmit = async (data) => {
         break;
       }
     } catch (error) {
-      console.error(`Error al intentar con el endpoint ${endpoint}:`, error);
+      throw new Error(error);
     }
   }
 

@@ -14,7 +14,7 @@ const ParqueaderosUserPage = () => {
     parkingService.getParking().then((response) => {
       setEstadoParqueadero(response[0].estado);
       setParkingSpaces(response);
-      setEspecialSpaceState(response[0].espacios[5].estado);
+      setEspecialSpaceState(response[0].espacios[0].estado);
     });
   }, [token]);
 
@@ -35,7 +35,7 @@ const ParqueaderosUserPage = () => {
           </h>
           <h className="text-1xl text-azul-10">
             Este módulo te permite visualizar la disponibilidad de las plazas de
-            estacionamiento del parqueadero de la ESFOT.
+            estacionamiento del parqueadero {parkingSpaces[0].nombre}.
           </h>
         </div>
 
@@ -60,7 +60,7 @@ const ParqueaderosUserPage = () => {
                     Si desea más información de este suceso o desea reservar,
                     por favor comuníquese al siguiente número:
                     <span className="text-lg font-bold text-orange-500">
-                     02 345 6789
+                      02 345 6789
                     </span>
                   </p>
                 </div>

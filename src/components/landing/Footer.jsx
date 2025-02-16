@@ -11,12 +11,11 @@ const Footer = ({ logoSrc, logoAlt, links }) => {
             {logoSrc && (
               <img src={logoSrc} alt={logoAlt || "Logo"} className="h-12" />
             )}
-            <span className="text-xl sm:text-2xl font-bold">PoliParking</span>
           </div>
 
           {/* Copyright */}
           <p className="text-center text-sm text-gray-400">
-            &copy; {currentYear} Parqueadero System. Todos los derechos
+            &copy; {currentYear} PoliParking. Todos los derechos
             reservados.
           </p>
         </div>

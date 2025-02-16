@@ -178,10 +178,11 @@ const UsuariosAdminPage = () => {
                 onClick={async () => {
                   try {
                     setHabilitados(!hablitados);
-                    const response = await guardiaService.enableUsers(token);
-                    console.log(response);
+                    await guardiaService.enableUsers(token);
                   } catch (error) {
-                    console.error("Error:", error);
+                    throw new Error(
+                      `Error al habilitar/deshabilitar usuarios: ${error.message}`,
+                    );
                   }
                 }}
               >

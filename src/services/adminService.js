@@ -13,8 +13,7 @@ const adminService = {
       const response = await fetchGet(baseAdmin, "/listar-usuarios", token);
       return response.data;
     } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
+      throw new Error(error);
     }
   },
 
@@ -25,7 +24,6 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async deleteExternalUser(token, userId) {
-
     try {
       const response = await fetchDelete(
         baseAdmin,
@@ -34,7 +32,7 @@ const adminService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 
@@ -51,7 +49,7 @@ const adminService = {
       const response = await fetchPost(baseGuardias, "/registrar", user, token);
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 
@@ -66,8 +64,7 @@ const adminService = {
       const response = await fetchGet(baseAdmin, "/listar-guardias", token);
       return response.data;
     } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
+      throw new Error(error);
     }
   },
 
@@ -87,7 +84,7 @@ const adminService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 
@@ -98,7 +95,6 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async deleteGuardia(token, userId) {
-
     try {
       const response = await fetchDelete(
         baseAdmin,
@@ -107,7 +103,7 @@ const adminService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 
@@ -130,7 +126,7 @@ const adminService = {
       );
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
   async confirmChangePassword(token) {
@@ -138,22 +134,16 @@ const adminService = {
       const response = await fetchGet(baseAdmin, `recuperar-clave/${token}`);
       return response.data;
     } catch (error) {
-      console.error("Error en la confirmación del token:", error);
       throw new Error("El token no es válido.");
     }
   },
   async recoverPassword(data, token) {
-
     try {
-      const response = await fetchPut(
-        baseAdmin,
-        `/nueva-clave/${token}`,
-        data,
-      );
+      const response = await fetchPut(baseAdmin, `/nueva-clave/${token}`, data);
 
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 };

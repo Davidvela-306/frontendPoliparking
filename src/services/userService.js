@@ -6,7 +6,7 @@ const userService = {
       const response = await fetchGet(baseUsuarios, "/perfil", token);
       return response.data;
     } catch (error) {
-      console.error(error);
+      throw new Error(error);
     }
   },
   async confirmChangePassword(token) {
@@ -14,7 +14,6 @@ const userService = {
       const response = await fetchGet(base, `recuperar-clave/${token}`);
       return response.data;
     } catch (error) {
-      console.error("Error en la confirmación del token:", error);
       throw new Error("El token no es válido.");
     }
   },
@@ -24,7 +23,7 @@ const userService = {
 
       return response.data;
     } catch (error) {
-      console.error("Error:", error);
+      throw new Error(error);
     }
   },
 };

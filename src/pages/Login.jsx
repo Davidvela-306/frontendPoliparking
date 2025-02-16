@@ -75,7 +75,6 @@ const Login = () => {
         tipo: true,
       });
     } catch (error) {
-      console.error("Login Error:", error);
       setMensaje({
         respuesta:
           error.response?.data?.msg || "Ha ocurrido un error, intente de nuevo",
