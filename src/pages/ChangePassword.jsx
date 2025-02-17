@@ -1,10 +1,12 @@
 import { useForm } from "react-hook-form";
 import { Card, Input, Button, Label, AlertText } from "@components/ui/index";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import adminService from "@/services/adminService";
 import guardiaService from "@/services/guardiaService";
 import userService from "@/services/userService";
+import { EyeSlashIcon } from "@/components/ui/icons";
+import { EyeIcon } from "lucide-react";
 
 const LOGIN_ROLES = [
   { value: "Usuario", label: "Usuario externo" },
@@ -27,6 +29,17 @@ const ChangePassword = () => {
   });
 
   const [recoveryToken, setRecoveryToken] = useState(null);
+  const [showPasswordOne, setShowPasswordOne] = useState(false);
+  const [showPasswordTwo, setShowPasswordTwo] = useState(false);
+
+  const togglePasswordOneVisibility = useCallback(() => {
+    setShowPasswordOne((prev) => !prev);
+  }, []);
+
+  const togglePasswordTwoVisibility = useCallback(() => {
+    setShowPasswordTwo((prev) => !prev);
+  }, []);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -155,18 +168,32 @@ const ChangePassword = () => {
               />
             )}
           </div>
-          <Input
-            type="password"
-            placeholder="Escribe tu nueva contraseña"
-            className="border border-gray-300 rounded-md p-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            {...register("password", {
-              required: "La contraseña es obligatoria",
-              minLength: {
-                value: 8,
-                message: "La contraseña debe tener al menos 8 caracteres.",
-              },
-            })}
-          />
+          <div className="relative">
+            <Input
+              type={showPasswordOne ? "text" : "password"}
+              placeholder="Escribe tu nueva contraseña"
+              className="border border-gray-300 rounded-md p-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              {...register("password", {
+                required: "La contraseña es obligatoria",
+                minLength: {
+                  value: 8,
+                  message: "La contraseña debe tener al menos 8 caracteres.",
+                },
+              })}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordOneVisibility}
+              className="absolute inset-y-2 right-3 flex"
+              aria-label={
+                showPasswordOne ? "Ocultar contraseña" : "Mostrar contraseña"
+              }
+            >
+              {showPasswordOne ?
+                <EyeSlashIcon size="size-4" />
+              : <EyeIcon size="size-4" />}
+            </button>
+          </div>
 
           {/* Confirmar Contraseña */}
           <div className="w-full flex justify-between items-center mt-4 mb-2">
@@ -178,16 +205,30 @@ const ChangePassword = () => {
               />
             )}
           </div>
-          <Input
-            type="password"
-            placeholder="Confirma tu nueva contraseña"
-            className="border border-gray-300 rounded-md p-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            {...register("confirmarPassword", {
-              required: "La confirmación de la contraseña es obligatoria",
-              validate: (value) =>
-                value === watchPassword || "Las contraseñas no coinciden",
-            })}
-          />
+          <div className="relative">
+            <Input
+              type={showPasswordTwo ? "text" : "password"}
+              placeholder="Confirma tu nueva contraseña"
+              className="border border-gray-300 rounded-md p-2 text-gray-700 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              {...register("confirmarPassword", {
+                required: "La confirmación de la contraseña es obligatoria",
+                validate: (value) =>
+                  value === watchPassword || "Las contraseñas no coinciden",
+              })}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordTwoVisibility}
+              className="absolute inset-y-2 right-3 flex"
+              aria-label={
+                showPasswordTwo ? "Ocultar contraseña" : "Mostrar contraseña"
+              }
+            >
+              {showPasswordTwo ?
+                <EyeSlashIcon size="size-4" />
+              : <EyeIcon size="size-4" />}
+            </button>
+          </div>
 
           {/* Submit Button */}
           <Button

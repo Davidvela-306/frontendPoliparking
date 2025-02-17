@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@context/AuthContext";
 import { AlertText } from "@components/ui/index";
@@ -6,10 +6,15 @@ import { Input, Button, Label } from "@components/ui";
 import { fetchPut } from "@helpers/request_functions";
 import { baseUsuarios, baseGuardias } from "@helpers/instances_routes";
 import CustomAlert from "@components/ui/CustomAlert";
+import { EyeSlashIcon } from "../ui/icons";
+import { EyeIcon } from "lucide-react";
 
 const ActualizarContraseña = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [showPasswordOne, setShowPasswordOne] = useState(false);
+  const [showPasswordTwo, setShowPasswordTwo] = useState(false);
+
   const { token, rol } = useAuth();
 
   const {
@@ -18,6 +23,14 @@ const ActualizarContraseña = () => {
     formState: { errors },
     reset,
   } = useForm();
+
+  const togglePasswordVisibilityOne = useCallback(() => {
+    setShowPasswordOne((prev) => !prev);
+  }, []);
+
+  const togglePasswordVisibilityTwo = useCallback(() => {
+    setShowPasswordTwo((prev) => !prev);
+  }, []);
 
   const onSubmit = async (values) => {
     try {
@@ -50,21 +63,61 @@ const ActualizarContraseña = () => {
             <AlertText text="El campo es obligatorio" />
           )}
         </div>
-        <Input
-          type="password"
-          placeholder="********"
-          {...register("actualPassword", { required: true })}
-        />
+        <div className="relative">
+          <Input
+            type={showPasswordOne ? "text" : "password"}
+            placeholder="********"
+            {...register("actualPassword", {
+              required: true,
+              minLength: {
+                value: 6,
+                message: "La contraseña debe tener al menos 6 caracteres",
+              },
+            })}
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibilityOne}
+            className="absolute inset-y-2 right-3 flex"
+            aria-label={
+              showPasswordOne ? "Ocultar contraseña" : "Mostrar contraseña"
+            }
+          >
+            {showPasswordOne ?
+              <EyeSlashIcon size="size-4" />
+            : <EyeIcon size="size-4" />}
+          </button>
+        </div>
 
         <div className="w-full flex justify-between">
           <Label text="Nueva contraseña" />
           {errors.nuevoPassword && <AlertText text="El campo es obligatorio" />}
         </div>
-        <Input
-          type="password"
-          placeholder="********"
-          {...register("nuevoPassword", { required: true })}
-        />
+        <div className="relative ">
+          <Input
+            type={showPasswordTwo ? "text" : "password"}
+            placeholder="********"
+            {...register("nuevoPassword", {
+              required: true,
+              minLength: {
+                value: 6,
+                message: "La contraseña debe tener al menos 6 caracteres",
+              },
+            })}
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibilityTwo}
+            className="absolute inset-y-2 right-3 flex"
+            aria-label={
+              showPasswordTwo ? "Ocultar contraseña" : "Mostrar contraseña"
+            }
+          >
+            {showPasswordTwo ?
+              <EyeSlashIcon size="size-4" />
+            : <EyeIcon size="size-4" />}
+          </button>
+        </div>
 
         <Button type="submit">Actualizar contraseña</Button>
       </form>
