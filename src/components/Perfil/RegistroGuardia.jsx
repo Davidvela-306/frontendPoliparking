@@ -29,17 +29,14 @@ const RegistroGuardia = ({ setRender, render }) => {
   const onSubmit = async (values) => {
     try {
       const user = { ...values, estado: true };
-      const response = await adminService.createGuardia({ token, user });
-
-
-      if (response) {
-        setRender(!render);
-        alert("Guardia creado correctamente");
-      } else {
-        alert("Error al crear el Guardia: no se recibió una respuesta válida");
-      }
+      await adminService.createGuardia({ token, user });
+      setRender(!render);
+      alert("Guardia creado correctamente");
     } catch (error) {
-      alert(`Error al crear el Guardia: ${error.message}`);
+      alert(
+        error?.response?.data?.msg ||
+          "Ha ocurrido un error, vuelva a intentarlo más tarde",
+      );
     }
   };
 

@@ -27,8 +27,8 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
   });
 
   const USER_ROLES = [
-    { value: "estudiante", label: "Estudiante" },
-    { value: "invitado", label: "Invitado" },
+    { value: "Estudiante", label: "Estudiante" },
+    { value: "Invitado", label: "Invitado" },
   ];
 
   const onSubmit = async (values) => {
@@ -41,10 +41,11 @@ const RegisterGuardiaUser = ({ setRender, render }) => {
           alert("Usuario creado correctamente");
         })
         .catch((error) => {
+          console.log(error);
           alert(
-            "Error al crear el usuario: no se recibió una respuesta válida",
+            error.response?.data?.msg ||
+              "Error al crear el usuario, intente nuevamente",
           );
-          throw Error(error);
         });
     } catch (error) {
       alert(`Error al crear el usuario: ${error.message}`);

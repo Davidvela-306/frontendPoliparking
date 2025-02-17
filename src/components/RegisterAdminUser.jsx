@@ -27,35 +27,59 @@ const RegisterAdminUser = ({ setRender, render }) => {
   });
 
   const USER_ROLES = [
-    { value: "administrativo", label: "Administrativo" },
-    { value: "docente", label: "Docente" },
+    { value: "Administrativo", label: "Administrativo" },
+    { value: "Docente", label: "Docente" },
   ];
 
   const onSubmit = async (values) => {
     try {
       const user = { ...values, estado: true };
       const response = await adminService.createExternalUser({ token, user });
-
-
       if (response) {
         setRender(!render);
-        alert("Usuario creado correctamente");
-      } else {
-        alert("Error al crear el usuario: no se recibió una respuesta válida");
+        alert(response.msg);
       }
     } catch (error) {
-      alert(`Error al crear el usuario: ${error.message}`);
+      alert(
+        error?.response?.data?.msg ||
+          "Ha ocurrido un error, vuelva a intentarlo más tarde",
+      );
     }
   };
 
   const fields = [
-    { label: "Nombre", name: "nombre", type: "text", placeholder:"Joe", },
-    { label: "Apellido", name: "apellido", type: "text", placeholder:"Doe" },
-    { label: "Cedula", name: "cedula", type: "number", placeholder:"0498733281" },
-    { label: "Email", name: "email", type: "email", placeholder:"joeDoe@gmail.com" },
-    { label: "Contraseña", name: "password", type: "password", placeholder:"********" },
-    { label: "Telefono", name: "telefono", type: "number", placeholder:"0987654321" },
-    { label: "Placa", name: "placa_vehiculo", type: "text", placeholder:"ABC-123" },
+    { label: "Nombre", name: "nombre", type: "text", placeholder: "Joe" },
+    { label: "Apellido", name: "apellido", type: "text", placeholder: "Doe" },
+    {
+      label: "Cedula",
+      name: "cedula",
+      type: "number",
+      placeholder: "0498733281",
+    },
+    {
+      label: "Email",
+      name: "email",
+      type: "email",
+      placeholder: "joeDoe@gmail.com",
+    },
+    {
+      label: "Contraseña",
+      name: "password",
+      type: "password",
+      placeholder: "********",
+    },
+    {
+      label: "Telefono",
+      name: "telefono",
+      type: "number",
+      placeholder: "0987654321",
+    },
+    {
+      label: "Placa",
+      name: "placa_vehiculo",
+      type: "text",
+      placeholder: "ABC-123",
+    },
     {
       label: "Rol",
       name: "rol",

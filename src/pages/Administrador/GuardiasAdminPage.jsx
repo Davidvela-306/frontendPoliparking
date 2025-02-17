@@ -24,9 +24,16 @@ const GuardiasAdminPage = () => {
   };
 
   useEffect(() => {
-    fetchUsers({ token }).then((fetchedUsers) => {
-      setFilterGuardias(fetchedUsers);
-    });
+    fetchUsers({ token })
+      .then((fetchedUsers) => {
+        setFilterGuardias(fetchedUsers);
+      })
+      .catch((error) => {
+        alert(
+          error?.response?.data?.msg ||
+            "Ha ocurrido un error, vuelva a intentarlo más tarde",
+        );
+      });
   }, [token, render]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -85,11 +92,14 @@ const GuardiasAdminPage = () => {
       setFilterGuardias(filterGuardias.filter((user) => user._id !== id));
       adminService
         .deleteGuardia(token, id)
-        .then(() => {
-          alert("Guardia eliminado correctamente");
+        .then((res) => {
+          alert(res.msg);
         })
         .catch((error) => {
-          alert("Error al eliminar el usuario:", error);
+          alert(
+            error?.response?.data?.msg ||
+              "Ha ocurrido un error, vuelva a intentarlo más tarde",
+          );
         });
     }
   };
@@ -97,12 +107,15 @@ const GuardiasAdminPage = () => {
     if (window.confirm(`Deseas cambiar el estado del guardia ${email}?`)) {
       adminService
         .changeGuardiaState(token, id, state)
-        .then(() => {
+        .then((res) => {
           setRender(!render);
-          alert("Ha cambiado el estado del guardia");
+          alert(res.msg);
         })
         .catch((error) => {
-          alert("Error al cambiar el estado:", error);
+          alert(
+            error?.response?.data?.msg ||
+              "Ha ocurrido un error, vuelva a intentarlo más tarde",
+          );
         });
     }
   };

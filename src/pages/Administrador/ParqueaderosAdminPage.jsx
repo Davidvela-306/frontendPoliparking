@@ -165,7 +165,7 @@ const ParqueaderosAdminPage = () => {
                       className="text-gray-700 font-medium"
                     />
                     <Input
-                      type="text"
+                      type="number"
                       placeholder="1"
                       className="w-full px-3 py-1 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                       {...register("planta", {

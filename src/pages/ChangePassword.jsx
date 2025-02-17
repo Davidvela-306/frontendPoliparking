@@ -60,7 +60,10 @@ const ChangePassword = () => {
           window.location.href = "/singin";
         })
         .catch((error) => {
-          throw Error(error);
+          alert(
+            error?.response?.data?.msg ||
+              "Ha ocurrido un error, vuelva a intentarlo más tarde",
+          );
         });
     }
 
@@ -77,7 +80,10 @@ const ChangePassword = () => {
           window.location.href = "/singin";
         })
         .catch((error) => {
-          throw Error(error);
+          alert(
+            error?.response?.data?.msg ||
+              "Ha ocurrido un error, vuelva a intentarlo más tarde",
+          );
         });
     }
 
@@ -94,7 +100,10 @@ const ChangePassword = () => {
           window.location.href = "/singin";
         })
         .catch((error) => {
-          throw Error(error);
+          alert(
+            error?.response?.data?.msg ||
+              "Ha ocurrido un error, vuelva a intentarlo más tarde",
+          );
         });
     }
   };

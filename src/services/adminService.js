@@ -1,5 +1,5 @@
 import { fetchDelete, fetchPatch, fetchPut } from "@/helpers/request_functions";
-import { baseAdmin, baseGuardias } from "@/helpers/instances_routes";
+import { baseAdmin } from "@/helpers/instances_routes";
 import { fetchGet, fetchPost } from "@/helpers/request_functions";
 const adminService = {
   /**
@@ -9,12 +9,8 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async getExternalUsers({ token }) {
-    try {
-      const response = await fetchGet(baseAdmin, "/listar-usuarios", token);
-      return response.data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const response = await fetchGet(baseAdmin, "/listar-usuarios", token);
+    return response.data;
   },
 
   /**
@@ -43,14 +39,14 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
 
-  // TODO : cambiar baseGuardias por baseAdmin
   async createExternalUser({ token, user }) {
-    try {
-      const response = await fetchPost(baseGuardias, "/registrar", user, token);
-      return response.data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const response = await fetchPost(
+      baseAdmin,
+      "/registrar-usuario",
+      user,
+      token,
+    );
+    return response.data;
   },
 
   /**
@@ -60,12 +56,8 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async getGuardias({ token }) {
-    try {
-      const response = await fetchGet(baseAdmin, "/listar-guardias", token);
-      return response.data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const response = await fetchGet(baseAdmin, "/listar-guardias", token);
+    return response.data;
   },
 
   /**
@@ -75,17 +67,13 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async createGuardia({ token, user }) {
-    try {
-      const response = await fetchPost(
-        baseAdmin,
-        "/registrar-guardia",
-        user,
-        token,
-      );
-      return response.data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const response = await fetchPost(
+      baseAdmin,
+      "/registrar-guardia",
+      user,
+      token,
+    );
+    return response.data;
   },
 
   /**
@@ -95,16 +83,12 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async deleteGuardia(token, userId) {
-    try {
-      const response = await fetchDelete(
-        baseAdmin,
-        `/eliminar-guardia/${userId}`,
-        token,
-      );
-      return response.data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const response = await fetchDelete(
+      baseAdmin,
+      `/eliminar-guardia/${userId}`,
+      token,
+    );
+    return response.data;
   },
 
   /**
@@ -117,25 +101,17 @@ const adminService = {
    * @throws {Error} If there is an error with the request.
    */
   async changeGuardiaState(token, userId, state) {
-    try {
-      const response = await fetchPatch(
-        baseAdmin,
-        `/cambiar-estado-guardia/${userId}`,
-        { estado: state.toString() },
-        token,
-      );
-      return response.data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const response = await fetchPatch(
+      baseAdmin,
+      `/cambiar-estado-guardia/${userId}`,
+      { estado: state.toString() },
+      token,
+    );
+    return response.data;
   },
   async confirmChangePassword(token) {
-    try {
-      const response = await fetchGet(baseAdmin, `recuperar-clave/${token}`);
-      return response.data;
-    } catch (error) {
-      throw new Error("El token no es válido.");
-    }
+    const response = await fetchGet(baseAdmin, `recuperar-clave/${token}`);
+    return response.data;
   },
   async recoverPassword(data, token) {
     try {

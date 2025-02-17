@@ -24,9 +24,16 @@ const UsuariosAdminPage = () => {
   };
 
   useEffect(() => {
-    fetchUsers({ token }).then((fetchedUsers) => {
-      setFilterUsers(fetchedUsers);
-    });
+    fetchUsers({ token })
+      .then((fetchedUsers) => {
+        setFilterUsers(fetchedUsers);
+      })
+      .catch((error) => {
+        alert(
+          error?.response?.data?.msg ||
+            "Ha ocurrido un error, vuelva a intentarlo mas tarde",
+        );
+      });
   }, [token, render]);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -90,7 +97,10 @@ const UsuariosAdminPage = () => {
           alert("Usuario eliminado correctamente");
         })
         .catch((error) => {
-          alert("Error al eliminar el usuario:", error);
+          alert(
+            error?.response?.data?.msg ||
+              "Ha ocurrido un error, vuelva a intentarlo más tarde",
+          );
         });
     }
   };
